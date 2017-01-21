@@ -1,6 +1,5 @@
 **/[Ll]ibrary/
 **/[Tt]emp/
-**/[Oo]bj/
 **/[Bb]uild/
 **/[Bb]uilds/
 **/Assets/AssetStoreTools*
@@ -18,7 +17,6 @@ ExportedObj/
 *.booproj
 *.svd
 
-
 # Unity3D generated meta files
 *.pidb.meta
 
@@ -28,3 +26,6 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+
+# Unignore obj files
+!*.obj
