@@ -87,7 +87,7 @@ public class PlayerControl : MonoBehaviour
                 break;
             case Defines.EPlayerType.medium:
             case Defines.EPlayerType.light:
-                FireWave(gameVars.m_wavePrefab, transform.position, transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
                 break;
             case Defines.EPlayerType.strange: // A.k.a didgeridoo guy
                 FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
