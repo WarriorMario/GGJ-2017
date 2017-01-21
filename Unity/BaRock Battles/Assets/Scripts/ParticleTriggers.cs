@@ -6,17 +6,13 @@ public class ParticleTriggers : MonoBehaviour {
 
     // List of particle effects that the player has to handle
     public GameObject m_droppingParticle;
-    public GameObject m_DrumParticle;
+    public GameObject m_drumParticle;
+    public GameObject m_fatCloudParticle;
     public GameObject m_fluteParticle;
     public GameObject m_hitMarkerParticle;
     public GameObject m_speedParticle;
     public GameObject m_violinParticle;
-
-    public void Start()
-    {
-        SpawnDroppingParticle(FindObjectOfType<PlayerControl>());
-    }
-
+    
     public void SpawnVictoryParticle(PlayerControl m_victor)
     {
 
@@ -29,7 +25,7 @@ public class ParticleTriggers : MonoBehaviour {
 
     public void SpawnDrumParticle(PlayerControl a_player, Wave a_wave)
     {
-        Instantiate(m_DrumParticle, a_player.transform);
+        Instantiate(m_drumParticle, a_player.transform);
     }
 
     public void SpawnViolinParticle(PlayerControl a_player, Wave a_wave)
