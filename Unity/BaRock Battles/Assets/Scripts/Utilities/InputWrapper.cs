@@ -6,9 +6,8 @@ namespace InputWrapper
 {
     public enum EKeyMode
     {
-        EKeyMode_SingleInputDevice,
-        EKeyMode_DualInputDevicePrioritizeKeyboard,
-        EKeyMode_DualInputDevicePrioritizeController,
+        EKeyMode_PrioritizeKeyboard,
+        EKeyMode_PrioritizeController,
     }
 
     //======================
@@ -68,25 +67,12 @@ namespace InputWrapper
     [System.Serializable]
     public class Key
     {
-        public enum EState
-        {
-            EState_KeyboardButton,
-            EState_JoystickButton,
-        }
-        public EState  state;
         public KeyCode key    = KeyCode.None;
         public EButton button = EButton.EButton_None;
     };
     [System.Serializable]
     public class KeyPair
     {
-        public enum EState
-        {
-            EState_KeyboardButtonPair,
-            EState_JoystickButtonPair,
-            EState_JoystickAxis,
-        }
-        public EState  state;
         public KeyCode keyNeg    = KeyCode.None;
         public KeyCode keyPos    = KeyCode.None;
         public EButton buttonNeg = EButton.EButton_None;
@@ -100,16 +86,14 @@ namespace InputWrapper
     [System.Serializable]
     public class Scheme
     {
-        public Scheme(int a_DeviceId)
+        public Scheme()
         {
-            m_DeviceId = a_DeviceId + 1;
-            
-            m_Action1    = new Key();
-            m_Action2    = new Key();
-
-            m_Confirm    = new Key();
-            m_Cancel     = new Key();
-            m_Start      = new Key();
+            m_Action1        = new Key();
+            m_Action2        = new Key();
+                            
+            m_Confirm        = new Key();
+            m_Cancel         = new Key();
+            m_Start          = new Key();
             
             m_HorizontalLeft = new KeyPair();
             m_VerticalRight  = new KeyPair();
@@ -117,116 +101,59 @@ namespace InputWrapper
             m_HorizontalLeft = new KeyPair();
             m_VerticalRight  = new KeyPair();
         }
-        public void CopyMapping(Scheme a_Scheme)
-        {
-            m_Action1    = a_Scheme.m_Action1;
-            m_Action2    = a_Scheme.m_Action2;
-
-            m_Confirm    = a_Scheme.m_Confirm;
-            m_Cancel     = a_Scheme.m_Cancel;
-            m_Start      = a_Scheme.m_Start;
-
-            m_HorizontalLeft = a_Scheme.m_HorizontalLeft;
-            m_VerticalLeft   = a_Scheme.m_VerticalLeft;
-
-            m_HorizontalRight = a_Scheme.m_HorizontalRight;
-            m_VerticalRight = a_Scheme.m_VerticalRight;
-        }
-
-        int m_DeviceId;
-
+        
         //======================
         // Events
         //======================
-        public bool GetDown(EKeyId a_Id)
+        public bool GetDown(EKeyId a_Id, int a_DeviceId)
         {
             Key k = GetKey(a_Id);
             
             switch(Defines.KEY_MODE)
             {
-                case EKeyMode.EKeyMode_SingleInputDevice:
-                    switch (k.state)
-                    {
-                        case Key.EState.EState_KeyboardButton:
-                            return Input.GetKeyDown(k.key);
-                        case Key.EState.EState_JoystickButton:
-                            return k.button == EButton.EButton_None ? false : Input.GetKeyDown("joystick " + m_DeviceId + " button " + (int)k.button);
-                    }
-                    return false;
-                case EKeyMode.EKeyMode_DualInputDevicePrioritizeKeyboard:
+                case EKeyMode.EKeyMode_PrioritizeKeyboard:
                     {
                         if (Input.GetKeyDown(k.key)) return true;
-                        if (k.button != EButton.EButton_None && Input.GetKeyDown("joystick " + m_DeviceId + " button " + (int)k.button)) return true;
+                        if (k.button != EButton.EButton_None && Input.GetKeyDown("joystick " + a_DeviceId + " button " + (int)k.button)) return true;
                     }
                     return false;
-                case EKeyMode.EKeyMode_DualInputDevicePrioritizeController:
+                case EKeyMode.EKeyMode_PrioritizeController:
                     {
-                        if (k.button != EButton.EButton_None && Input.GetKeyDown("joystick " + m_DeviceId + " button " + (int)k.button)) return true;
+                        if (k.button != EButton.EButton_None && Input.GetKeyDown("joystick " + a_DeviceId + " button " + (int)k.button)) return true;
                         if (Input.GetKeyDown(k.key)) return true;
                     }
                     return false;
             }
             return false;
         }
-        public bool GetHold(EKeyId a_Id)
+        public bool GetHold(EKeyId a_Id, int a_DeviceId)
         {
             Key k = GetKey(a_Id);
 
             switch (Defines.KEY_MODE)
             {
-                case EKeyMode.EKeyMode_SingleInputDevice:
-                    switch (k.state)
-                    {
-                        case Key.EState.EState_KeyboardButton:
-                            return Input.GetKey(k.key);
-                        case Key.EState.EState_JoystickButton:
-                            return k.button == EButton.EButton_None ? false : Input.GetKey("joystick " + m_DeviceId + " button " + (int)k.button);
-                    }
-                    return false;
-                case EKeyMode.EKeyMode_DualInputDevicePrioritizeKeyboard:
+                case EKeyMode.EKeyMode_PrioritizeKeyboard:
                     {
                         if (Input.GetKey(k.key)) return true;
-                        if (k.button != EButton.EButton_None && Input.GetKey("joystick " + m_DeviceId + " button " + (int)k.button)) return true;
+                        if (k.button != EButton.EButton_None && Input.GetKey("joystick " + a_DeviceId + " button " + (int)k.button)) return true;
                     }
                     return false;
-                case EKeyMode.EKeyMode_DualInputDevicePrioritizeController:
+                case EKeyMode.EKeyMode_PrioritizeController:
                     {
-                        if (k.button != EButton.EButton_None && Input.GetKey("joystick " + m_DeviceId + " button " + (int)k.button)) return true;
+                        if (k.button != EButton.EButton_None && Input.GetKey("joystick " + a_DeviceId + " button " + (int)k.button)) return true;
                         if (Input.GetKey(k.key)) return true;
                     }
                     return false;
             }
             return false;
         }
-        public float GetPress(EKeyPairId a_Id)
+        public float GetPress(EKeyPairId a_Id, int a_DeviceId)
         {
             KeyPair kp = GetKeyPair(a_Id);
 
             switch (Defines.KEY_MODE)
             {
-                case EKeyMode.EKeyMode_SingleInputDevice:
-                    switch (kp.state)
-                    {
-                        case KeyPair.EState.EState_KeyboardButtonPair:
-                            {
-                                float mag = 0.0f;
-                                if (Input.GetKey(kp.keyNeg)) mag -= 1.0f;
-                                if (Input.GetKey(kp.keyPos)) mag += 1.0f;
-                                return mag;
-                            }
-                        case KeyPair.EState.EState_JoystickButtonPair:
-                            {
-                                float mag = 0.0f;
-                                string jStr = "joystick " + m_DeviceId + " button ";
-                                if (kp.buttonNeg != EButton.EButton_None && Input.GetKey(jStr + (int)kp.buttonNeg)) mag -= 1.0f;
-                                if (kp.buttonPos != EButton.EButton_None && Input.GetKey(jStr + (int)kp.buttonPos)) mag += 1.0f;
-                                return mag;
-                            }
-                        case KeyPair.EState.EState_JoystickAxis:
-                            return Input.GetAxis("joystick " + m_DeviceId + " axis " + (int)kp.axis);
-                    }
-                    return 0.0f;
-                case EKeyMode.EKeyMode_DualInputDevicePrioritizeKeyboard:
+                case EKeyMode.EKeyMode_PrioritizeKeyboard:
                     {
                         float mag = 0.0f;
                         
@@ -234,25 +161,25 @@ namespace InputWrapper
                         if (Input.GetKey(kp.keyNeg)) mag -= 1.0f;
                         if (Input.GetKey(kp.keyPos)) mag += 1.0f;
                         // Controller - buttons
-                        string jStr = "joystick " + m_DeviceId + " button ";
+                        string jStr = "joystick " + a_DeviceId + " button ";
                         if (kp.buttonNeg != EButton.EButton_None && Input.GetKey(jStr + (int)kp.buttonNeg)) mag -= 1.0f;
                         if (kp.buttonPos != EButton.EButton_None && Input.GetKey(jStr + (int)kp.buttonPos)) mag += 1.0f;
                         // Controller - axes
-                        mag += Input.GetAxis("joystick " + m_DeviceId + " axis " + (int)kp.axis);
+                        mag += Input.GetAxis("joystick " + a_DeviceId + " axis " + (int)kp.axis);
 
                         return mag;
                     }
                     return 0.0f;
-                case EKeyMode.EKeyMode_DualInputDevicePrioritizeController:
+                case EKeyMode.EKeyMode_PrioritizeController:
                     {
                         float mag = 0.0f;
                         
                         // Controller - buttons
-                        string jStr = "joystick " + m_DeviceId + " button ";
+                        string jStr = "joystick " + a_DeviceId + " button ";
                         if (kp.buttonNeg != EButton.EButton_None && Input.GetKey(jStr + (int)kp.buttonNeg)) mag -= 1.0f;
                         if (kp.buttonPos != EButton.EButton_None && Input.GetKey(jStr + (int)kp.buttonPos)) mag += 1.0f;
                         // Controller - axes
-                        mag += Input.GetAxis("joystick " + m_DeviceId + " axis " + (int)kp.axis);
+                        mag += Input.GetAxis("joystick " + a_DeviceId + " axis " + (int)kp.axis);
                         // Keyboard
                         if (Input.GetKey(kp.keyNeg)) mag -= 1.0f;
                         if (Input.GetKey(kp.keyPos)) mag += 1.0f;
@@ -263,21 +190,10 @@ namespace InputWrapper
             }
             return 0.0f;
         }
-        public Vector2 GetPressAsAxis(bool left)
+        public Vector2 GetPressAsAxis(EKeyPairId a_HorizontalId, EKeyPairId a_VerticalId, int a_DeviceId)
         {
-            float hPress;
-            float vPress; 
-            if(left)
-            {
-                hPress= GetPress(EKeyPairId.EKeyPairId_HorizontalLeft);
-                vPress = GetPress(EKeyPairId.EKeyPairId_VerticalLeft);
-            }
-            else
-            {
-                hPress = GetPress(EKeyPairId.EKeyPairId_HorizontalRight);
-                vPress = GetPress(EKeyPairId.EKeyPairId_VerticalRight);
-            }
-
+            float hPress = GetPress(a_HorizontalId, a_DeviceId);
+            float vPress = GetPress(a_VerticalId  , a_DeviceId);
             return new Vector2(hPress, vPress);
         }
         
@@ -340,21 +256,20 @@ namespace InputWrapper
         public void SetKey(EKeyId a_Id, KeyCode a_Key)
         {
             Key k   = GetKey(a_Id);
-            k.state = Key.EState.EState_KeyboardButton;
+
             k.key   = a_Key;
             
         }
         public void SetKey(EKeyId a_Id, EButton a_Button)
         {
             Key k    = GetKey(a_Id);
-            k.state  = Key.EState.EState_JoystickButton;
+            
             k.button = a_Button;
         }
 
         public void SetKeyPairHalf(EKeyPairId a_Id, KeyCode a_Key, EKeyPairHalf a_KeyPairHalf)
         {
             KeyPair kp = GetKeyPair(a_Id);
-            kp.state  = KeyPair.EState.EState_KeyboardButtonPair;
 
             if (a_KeyPairHalf == EKeyPairHalf.EKeyPairHalf_Neg)
                 kp.keyNeg = a_Key;
@@ -364,7 +279,6 @@ namespace InputWrapper
         public void SetKeyPairHalf(EKeyPairId a_Id, EButton a_Button, EKeyPairHalf a_KeyPairHalf)
         {
             KeyPair kp = GetKeyPair(a_Id);
-            kp.state = KeyPair.EState.EState_JoystickButtonPair;
 
             if (a_KeyPairHalf == EKeyPairHalf.EKeyPairHalf_Neg)
                 kp.buttonNeg = a_Button;
@@ -375,21 +289,21 @@ namespace InputWrapper
         public void SetKeyPair(EKeyPairId a_Id, KeyCode a_KeyNeg, KeyCode a_KeyPos)
         {
             KeyPair kp = GetKeyPair(a_Id);
-            kp.state  = KeyPair.EState.EState_KeyboardButtonPair;
+
             kp.keyNeg = a_KeyNeg;
             kp.keyPos = a_KeyPos;
         }
         public void SetKeyPair(EKeyPairId a_Id, EButton a_ButtonNeg, EButton a_ButtonPos)
         {
             KeyPair kp = GetKeyPair(a_Id);
-            kp.state     = KeyPair.EState.EState_KeyboardButtonPair;
+
             kp.buttonNeg = a_ButtonNeg;
             kp.buttonPos = a_ButtonPos;
         }
         public void SetKeyPair(EKeyPairId a_Id, EAxis a_Axis)
         {
             KeyPair kp = GetKeyPair(a_Id);
-            kp.state = KeyPair.EState.EState_JoystickAxis;
+
             kp.axis = a_Axis;
         }
 

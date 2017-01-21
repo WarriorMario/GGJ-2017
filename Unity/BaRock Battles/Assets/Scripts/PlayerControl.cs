@@ -7,81 +7,38 @@ using InputWrapper;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerControl : MonoBehaviour
 {
-    public enum PlayerType
-    {
-        heavy,
-        medium,
-        light,
-        strange
-    };
-    public PlayerType m_playerType = PlayerType.heavy;
-    public int m_playerIdx;
+    public Defines.EPlayerType m_playerType;
+    public int                 m_controlId;
 
-    // player movement variables
-    public float m_accelSpeed = 2.0f;
-    public float m_drag = 5.0f;
-    public float m_shootWaveAccelSpeed = 50.0f;
+    // References.
     CharacterController m_myController;
+    
+    Vector3 m_moveDir; // current velocity vector
+    Vector3 m_shootDir = Vector3.right; // the last known direction to shoot in
 
-    // bullet variables
-    public float m_waveSpeed = 7.0f;
-    public float m_waveMaxPower = 200.0f;
-    public float m_waveMinPower = 180.0f;
-    public float m_waveAngle = 5.0f;
-    public float m_waveMinWidth = 0.1f;
-    public float m_waveMaxLength = 10.0f;
-
-    // input variables
-    public Scheme m_publicControlScheme;
-    Scheme m_controlScheme;
-
-    // bullet spawn variables
-    public GameObject m_heavyBulletPrefab;
-    public float m_bulletSpawnOffset = 2.0f;
-
-    // current velocity vector
-    Vector3 m_moveDir;
-
-    // the last known direction to shoot in
-    Vector3 m_shootDir = Vector3.right;
-
-
-    // player specific variables
-    // player heavy
-    public GameObject m_1blockPolePrefab;
-    public float m_1blockPoleLifeTime = 10.0f;
-
-    // player medium
-    public float m_2attackDelayTime = 0.5f;
-    float m_2attackDelayTimeSpent = 0.0f;
-
-    // player light
-    public float m_3attackDelayTime = 0.5f;
-    float m_3attackDelayTimeSpent = 0.0f;
-
-    // player strange
-    PlayerControl[] m_4players;
-    public GameObject m_4reversedWavePrefab;
+    // Player type specific variables
+    float m_attackDelayTimeSpent;
 
     // Use this for initialization
     void Start ()
     {
         m_myController = GetComponent<CharacterController>();
-        m_controlScheme = new Scheme(m_playerIdx);
-        m_controlScheme.CopyMapping(m_publicControlScheme);
-        m_4players = FindObjectsOfType<PlayerControl>();        
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        Vector2 movement = m_controlScheme.GetPressAsAxis(true);
-        movement *= m_accelSpeed * Time.deltaTime;
+        GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+        Scheme            controls   = gameVars.m_controls;
+
+        Vector2 movement = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
+        movement *= playerVars.m_movementAccelerationSpeed * Time.deltaTime;
         m_moveDir += new Vector3(movement.x, 0.0f, movement.y);
-        m_moveDir -= m_moveDir * m_drag * Time.deltaTime;
+        m_moveDir -= m_moveDir * playerVars.m_movementDrag * Time.deltaTime;
         m_myController.SimpleMove(m_moveDir);
 
-        Vector2 dir = m_controlScheme.GetPressAsAxis(false);
+        Vector2 dir = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
         if (dir != Vector2.zero)
         {
             dir.Normalize();
@@ -89,46 +46,65 @@ public class PlayerControl : MonoBehaviour
             transform.forward = m_shootDir;
         }
         
+        if(m_attackDelayTimeSpent < playerVars.m_attackDelayTime)
+        {
+            return;
+        }
+
         switch(m_playerType)
         {
-            case PlayerType.heavy:
-                if (m_controlScheme.GetDown(EKeyId.EKeyId_Action1))
+            case Defines.EPlayerType.heavy:
                 {
-                    Vector3 shootTemp = m_shootDir;
-                    m_shootDir = new Vector3(m_shootDir.z, 0.0f, -m_shootDir.x);
-                    StartAttack();
-                    m_shootDir = -m_shootDir;
-                    StartAttack();
-                    m_shootDir = shootTemp;
-                }
-                if (m_controlScheme.GetDown(EKeyId.EKeyId_Action2))
-                {
-                    BlockPole p = Instantiate(m_1blockPolePrefab, transform.position, Quaternion.identity).GetComponent<BlockPole>();
-                    p.Init(m_1blockPoleLifeTime, m_playerIdx);
-                }
-                break;
-            case PlayerType.medium:
-                m_2attackDelayTimeSpent += Time.deltaTime;
-                if (m_controlScheme.GetHold(EKeyId.EKeyId_Action1) && m_2attackDelayTimeSpent > m_2attackDelayTime)
-                {
-                    m_2attackDelayTimeSpent = 0.0f;
-                    StartAttack();
+                    HeavyVariables heavyVars = gameVars.m_heavy;
+
+                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
+                    {
+                        Vector3 shootTemp = m_shootDir;
+                        m_shootDir = new Vector3(m_shootDir.z, 0.0f, -m_shootDir.x);
+                        StartAttack();
+                        m_shootDir = -m_shootDir;
+                        StartAttack();
+                        m_shootDir = shootTemp;
+                    }
+                    if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId))
+                    {
+                        BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position, Quaternion.identity).GetComponent<BlockPole>();
+                        p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
+                    }
                 }
                 break;
-            case PlayerType.light:
-                m_3attackDelayTimeSpent += Time.deltaTime;
-                if (m_controlScheme.GetHold(EKeyId.EKeyId_Action1) && m_3attackDelayTimeSpent > m_2attackDelayTime)
+            case Defines.EPlayerType.medium:
                 {
-                    m_3attackDelayTimeSpent = 0.0f;
-                    StartAttack();
+                    MediumVariables mediumVars = gameVars.m_medium;
+
+                    m_attackDelayTimeSpent += Time.deltaTime;
+                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
+                    {
+                        StartAttack();
+                    }
+                    break;
                 }
-                break;
-            case PlayerType.strange:
-                if (m_controlScheme.GetDown(EKeyId.EKeyId_Action1))
+            case Defines.EPlayerType.light:
                 {
-                    StartReversedAttack();
+                    LightVariables lightVars = gameVars.m_light;
+
+                    m_attackDelayTimeSpent += Time.deltaTime;
+                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
+                    {
+                        StartAttack();
+                    }
+                    break;
                 }
-                break;
+            case Defines.EPlayerType.strange:
+                {
+                    StrangeVariables strangeVars = gameVars.m_strange;
+
+                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
+                    {
+                        StartAttack();
+                    }
+                    break;
+                }
         }
 	}
 
@@ -140,18 +116,56 @@ public class PlayerControl : MonoBehaviour
 
     void StartAttack()
     {
-        Vector3 spawnPos = transform.position + m_shootDir * m_bulletSpawnOffset;
-        Wave bullet = Instantiate(m_heavyBulletPrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
-        bullet.Init(m_shootDir * m_waveSpeed, m_playerIdx, m_waveMinWidth, m_waveMaxLength, m_waveAngle, m_waveMinPower, m_waveMaxPower);
-        m_moveDir -= m_shootDir.normalized * m_shootWaveAccelSpeed;
-    }
+        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+        
+        Vector3 spawnPos = transform.position + m_shootDir * playerVars.m_waveSpawnOffset;
 
-    void StartReversedAttack()
-    {
-        Vector3 spawnPos = transform.position + m_shootDir * m_waveMaxLength;
-        ReversedWave wave = Instantiate(m_4reversedWavePrefab, spawnPos, Quaternion.identity).GetComponent<ReversedWave>();
-        wave.Init(-m_shootDir * m_waveSpeed, m_playerIdx, m_waveMinWidth, m_waveMaxLength, m_waveAngle, m_waveMinPower, m_waveMaxPower);
-        m_moveDir += m_shootDir.normalized * m_shootWaveAccelSpeed;
+        switch (m_playerType)
+        {
+            case Defines.EPlayerType.heavy:
+                {
+                    HeavyVariables vars = gameVars.m_heavy;
+
+                    Wave wave = Instantiate(vars.m_wavePrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
+                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
+
+                    break;
+                }
+            case Defines.EPlayerType.medium:
+                {
+                    MediumVariables vars = gameVars.m_medium;
+
+                    Wave wave = Instantiate(vars.m_wavePrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
+                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
+
+                    break;
+                }
+            case Defines.EPlayerType.light:
+                {
+                    LightVariables vars = gameVars.m_light;
+
+                    Wave wave = Instantiate(vars.m_wavePrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
+                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
+
+                    break;
+                }
+            case Defines.EPlayerType.strange:
+                {
+                    StrangeVariables vars = gameVars.m_strange;
+
+                    ReversedWave wave = Instantiate(vars.m_reversedWavePrefab, spawnPos, Quaternion.identity).GetComponent<ReversedWave>();
+                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
+
+                    break;
+                }
+        }
+
+        m_attackDelayTimeSpent = 0.0f;
     }
 
     public void GetHitByWave(Wave a_wave)

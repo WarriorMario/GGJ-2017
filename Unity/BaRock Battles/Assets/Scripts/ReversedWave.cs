@@ -64,10 +64,10 @@ public class ReversedWave : MonoBehaviour
         if (other.tag == "Player")
         {
             PlayerControl p = other.GetComponent<PlayerControl>();
-            if(!m_immunePlayers.Exists(x => x == p.m_playerIdx))
+            if(!m_immunePlayers.Exists(x => x == p.m_controlId))
             {
                 p.GetHitByWave(this);
-                m_immunePlayers.Add(p.m_playerIdx);
+                m_immunePlayers.Add(p.m_controlId);
             }
         }
     }
