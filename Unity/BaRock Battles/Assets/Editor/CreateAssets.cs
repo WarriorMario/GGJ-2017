@@ -14,9 +14,15 @@ public class CreateAssets
         Selection.activeObject = asset;
     }
 
-    [MenuItem("Design/GameplayVariables")]
-    public static void CreatePlayerConfig()
+    [MenuItem("Design/Create Gameplay Variables")]
+    public static void CreateGameplayVariables()
     {
         CreateAsset(ScriptableObject.CreateInstance<GameplayVariables>(), "Assets/Design/Variables/NewGameplayVariables.asset");
+    }
+
+    [MenuItem("Design/Save Assets")]
+    public static void SaveAssets()
+    {
+        AssetDatabase.SaveAssets();
     }
 }

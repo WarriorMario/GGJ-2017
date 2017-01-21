@@ -14,7 +14,6 @@ public class PlayerControl : MonoBehaviour
     CharacterController m_myController;
     
     Vector3 m_moveDir; // current velocity vector
-    Vector3 m_shootDir = Vector3.right; // the last known direction to shoot in
 
     // Player type specific variables
     float m_attackDelayTimeSpent;
@@ -47,72 +46,99 @@ public class PlayerControl : MonoBehaviour
         Vector2 dir = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
         if (dir != Vector2.zero)
         {
-            dir.Normalize();
-            m_shootDir = new Vector3(dir.x, 0.0f, dir.y);
-            transform.forward = m_shootDir;
-        }
-        
-        if(m_attackDelayTimeSpent < playerVars.m_attackDelayTime)
-        {
-            return;
+            transform.forward = new Vector3(dir.x, 0.0f, dir.y).normalized;
         }
 
-        switch(m_playerType)
+        m_attackDelayTimeSpent += Time.deltaTime;
+        if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId) && m_attackDelayTimeSpent >= playerVars.m_attackDelayTime)
+        {
+            PerformAction1();
+
+            m_attackDelayTimeSpent = 0.0f;
+        }
+        if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId))
+        {
+            PerformAction2();
+        }
+	}
+
+    //////////////////////////////
+    // Action 1
+    //////////////////////////////
+    void FireWave(GameObject a_prefab, Vector3 a_start, Vector3 a_dir)
+    {
+        PlayerVariables vars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+        
+        Wave wave = Instantiate(a_prefab, a_start, Quaternion.identity).GetComponent<Wave>();
+
+        wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+        m_moveDir -= a_dir * vars.m_attackAccelerationSpeed;
+    }
+    void PerformAction1()
+    {
+        GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+
+        switch (m_playerType)
+        {
+            case Defines.EPlayerType.heavy:
+                FireWave(gameVars.m_wavePrefab, transform.position, -transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position,  transform.right);
+                break;
+            case Defines.EPlayerType.medium:
+            case Defines.EPlayerType.light:
+                FireWave(gameVars.m_wavePrefab, transform.position, transform.right);
+                break;
+            case Defines.EPlayerType.strange: // A.k.a didgeridoo guy
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
+                break;
+        }
+    }
+
+    //////////////////////////////
+    // Action 2
+    //////////////////////////////
+    void PerformAction2()
+    {
+        GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+
+        switch (m_playerType)
         {
             case Defines.EPlayerType.heavy:
                 {
                     HeavyVariables heavyVars = gameVars.m_heavy;
-
-                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
-                    {
-                        Vector3 shootTemp = m_shootDir;
-                        m_shootDir = new Vector3(m_shootDir.z, 0.0f, -m_shootDir.x);
-                        StartAttack();
-                        m_shootDir = -m_shootDir;
-                        StartAttack();
-                        m_shootDir = shootTemp;
-                    }
-                    if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId))
-                    {
-                        BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position, Quaternion.identity).GetComponent<BlockPole>();
-                        p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
-                    }
+                    
+                    BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position, Quaternion.identity).GetComponent<BlockPole>();
+                    p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
                 }
                 break;
             case Defines.EPlayerType.medium:
                 {
                     MediumVariables mediumVars = gameVars.m_medium;
 
-                    m_attackDelayTimeSpent += Time.deltaTime;
-                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
-                    {
-                        StartAttack();
-                    }
+                    // ...
+
                     break;
                 }
             case Defines.EPlayerType.light:
                 {
                     LightVariables lightVars = gameVars.m_light;
 
-                    m_attackDelayTimeSpent += Time.deltaTime;
-                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
-                    {
-                        StartAttack();
-                    }
+                    // ...
+
                     break;
                 }
-            case Defines.EPlayerType.strange:
+            case Defines.EPlayerType.strange: // A.k.a didgeridoo guy
                 {
                     StrangeVariables strangeVars = gameVars.m_strange;
+                    
+                    // ...
 
-                    if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId))
-                    {
-                        StartAttack();
-                    }
                     break;
                 }
         }
-	}
+    }
 
     void OnDrawGizmos()
     {
@@ -120,65 +146,7 @@ public class PlayerControl : MonoBehaviour
         Gizmos.DrawRay(transform.position, transform.forward);
     }
 
-    void StartAttack()
-    {
-        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
-        PlayerVariables playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
-        
-        Vector3 spawnPos = transform.position + m_shootDir * playerVars.m_waveSpawnOffset;
-
-        switch (m_playerType)
-        {
-            case Defines.EPlayerType.heavy:
-                {
-                    HeavyVariables vars = gameVars.m_heavy;
-
-                    Wave wave = Instantiate(vars.m_wavePrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
-                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
-                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
-
-                    break;
-                }
-            case Defines.EPlayerType.medium:
-                {
-                    MediumVariables vars = gameVars.m_medium;
-
-                    Wave wave = Instantiate(vars.m_wavePrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
-                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
-                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
-
-                    break;
-                }
-            case Defines.EPlayerType.light:
-                {
-                    LightVariables vars = gameVars.m_light;
-
-                    Wave wave = Instantiate(vars.m_wavePrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
-                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
-                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
-
-                    break;
-                }
-            case Defines.EPlayerType.strange:
-                {
-                    StrangeVariables vars = gameVars.m_strange;
-
-                    ReversedWave wave = Instantiate(vars.m_reversedWavePrefab, spawnPos, Quaternion.identity).GetComponent<ReversedWave>();
-                    wave.Init(m_shootDir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
-                    m_moveDir -= m_shootDir.normalized * vars.m_attackAccelerationSpeed;
-
-                    break;
-                }
-        }
-
-        m_attackDelayTimeSpent = 0.0f;
-    }
-
     public void GetHitByWave(Wave a_wave)
-    {
-        m_moveDir += a_wave.Direction * a_wave.GetPower();
-    }
-    public void GetHitByWave(ReversedWave a_wave)
     {
         m_moveDir += a_wave.Direction * a_wave.GetPower();
     }

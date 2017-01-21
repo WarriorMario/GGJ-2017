@@ -29,10 +29,5 @@ public class BlockPole : MonoBehaviour
             Wave w = other.GetComponent<Wave>();
             w.Bounce();
         }
-        if (other.tag == "ReversedWave")
-        {
-            ReversedWave w = other.GetComponent<ReversedWave>();
-            w.Bounce();
-        }
     }
 }
