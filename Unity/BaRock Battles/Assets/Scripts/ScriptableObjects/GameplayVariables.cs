@@ -50,7 +50,6 @@ public class GameplayVariables : ScriptableObject
     public GameObject m_wavePrefab;
 
     [Space()]
-    public Scheme m_controls;
     public string m_ArenaSceneName;
 
     [Header("Player type specific")]
