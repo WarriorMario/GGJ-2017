@@ -50,6 +50,7 @@ public class GameplayVariables : ScriptableObject
 {
     [Header("General settings")]
     public Scheme m_controls;
+    public string m_ArenaSceneName;
 
     [Header("Player type specific")]
     public HeavyVariables   m_heavy;
