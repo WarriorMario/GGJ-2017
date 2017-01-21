@@ -50,6 +50,7 @@ public class GameplayVariables : ScriptableObject
     public GameObject m_wavePrefab;
 
     [Space()]
+    public string m_ArenaSceneName;
 
     [Header("Player type specific")]
     public HeavyVariables   m_heavy;
