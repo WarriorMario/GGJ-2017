@@ -21,18 +21,13 @@ public class BlockPole : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
+    
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == "Wave")
         {
-            Wave w = other.GetComponent<Wave>();
-            w.Bounce();
-        }
-        if (other.tag == "ReversedWave")
-        {
-            ReversedWave w = other.GetComponent<ReversedWave>();
-            w.Bounce();
+            Wave wave = other.GetComponent<Wave>();
+            wave.Redirect(transform.forward);
         }
     }
 }
