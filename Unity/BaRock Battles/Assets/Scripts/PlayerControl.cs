@@ -86,8 +86,9 @@ public class PlayerControl : MonoBehaviour
         {
             dir.Normalize();
             m_shootDir = new Vector3(dir.x, 0.0f, dir.y);
+            transform.forward = m_shootDir;
         }
-
+        
         switch(m_playerType)
         {
             case PlayerType.heavy:
@@ -130,6 +131,12 @@ public class PlayerControl : MonoBehaviour
                 break;
         }
 	}
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = new Color(1.0f, 0.5f, 0.0f, 1.0f);
+        Gizmos.DrawRay(transform.position, transform.forward);
+    }
 
     void StartAttack()
     {
