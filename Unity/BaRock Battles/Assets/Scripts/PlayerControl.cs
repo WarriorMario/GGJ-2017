@@ -71,7 +71,7 @@ public class PlayerControl : MonoBehaviour
         
         Wave wave = Instantiate(a_prefab, a_start, Quaternion.identity).GetComponent<Wave>();
 
-        wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxLength, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+        wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxDistance, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
         m_moveDir -= a_dir * vars.m_attackAccelerationSpeed;
     }
     void PerformAction1()
@@ -109,7 +109,7 @@ public class PlayerControl : MonoBehaviour
                 {
                     HeavyVariables heavyVars = gameVars.m_heavy;
                     
-                    BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position, Quaternion.identity).GetComponent<BlockPole>();
+                    BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position + transform.forward * heavyVars.m_blockPoleSpawnOffset, transform.rotation).GetComponent<BlockPole>();
                     p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
                 }
                 break;

@@ -6,7 +6,8 @@ using UnityEngine;
 public class Wave : MonoBehaviour
 {
     // Wave properties
-    float m_maxLength;
+    float m_distance;
+    float m_maxDistance;
     float m_minWidth;
     float m_angle;
     float m_tanAngle;
@@ -14,16 +15,17 @@ public class Wave : MonoBehaviour
     float m_maxPower;
 
     // Other properties
+    Vector3   m_previousPos;
     Vector3   m_startPos;
     Vector3   m_dir; // Speed is included in the vector
     Rigidbody m_myRigidBody;
     List<int> m_immunePlayers;
 
 	// Use this for initialization
-	public void Init (Vector3 a_dir, int a_spawnerIdx, float a_minWidth, float a_maxLength, float a_angle, float a_minPower, float a_maxPower)
+	public void Init (Vector3 a_dir, int a_spawnerId, float a_minWidth, float a_maxDistance, float a_angle, float a_minPower, float a_maxPower)
     {
         m_dir       = a_dir;
-        m_maxLength = a_maxLength;
+        m_maxDistance = a_maxDistance;
         m_minWidth  = a_minWidth;
         m_angle     = a_angle;
         m_minPower  = a_minPower;
@@ -33,26 +35,31 @@ public class Wave : MonoBehaviour
         // Init local containers/references
         m_myRigidBody   = GetComponent<Rigidbody>();
         m_immunePlayers = new List<int>();
-        
+
         // Save player properties
-        m_startPos = transform.position;
+        m_previousPos = transform.position;
         m_myRigidBody.velocity = m_dir;
-        m_immunePlayers.Add(a_spawnerIdx);
+        m_immunePlayers.Add(a_spawnerId);
 
         transform.LookAt(transform.position + a_dir);
+        Vector3 scale = transform.localScale;
+        scale.x = m_minWidth;
+        transform.localScale = scale;
     }
 
     public void Update()
     {
-        float adjacent = (transform.position - m_startPos).magnitude;
-        float opposite = adjacent * m_tanAngle;
-        Vector3 scale = transform.localScale;
-        scale.x = opposite + m_minWidth;
-        transform.localScale = scale;
-        if(adjacent > m_maxLength)
+        m_distance += (transform.position - m_previousPos).magnitude;
+        m_previousPos = transform.position;
+        if (m_distance > m_maxDistance)
         {
             Destroy(gameObject);
         }
+
+        float opposite = m_distance * m_tanAngle;
+        Vector3 scale = transform.localScale;
+        scale.x = opposite + m_minWidth;
+        transform.localScale = scale;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -72,15 +79,15 @@ public class Wave : MonoBehaviour
     {
         get { return m_myRigidBody.velocity.normalized; }
     }
-    public void Bounce()
+    public void Redirect(Vector3 a_newDirection)
     {
-        m_myRigidBody.velocity = -m_myRigidBody.velocity;
+        transform.forward = a_newDirection;
+        m_myRigidBody.velocity = a_newDirection * m_myRigidBody.velocity.magnitude;
         m_immunePlayers.Clear();
     }
     public float GetPower()
     {
-        float distanceTraveled = (transform.position - m_startPos).magnitude;
-        float scale = Mathf.Max(distanceTraveled / m_maxLength, 1.0f);
+        float scale = Mathf.Max(m_distance / m_distance, 1.0f);
         float sign  = Mathf.Sign(m_maxPower - m_minPower);
         float power = m_minPower + sign * Mathf.Abs(m_maxPower - m_minPower) * scale;
         return power;

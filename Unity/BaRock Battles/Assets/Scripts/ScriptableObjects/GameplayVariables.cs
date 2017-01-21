@@ -12,11 +12,11 @@ public class PlayerVariables
     public float m_attackAccelerationSpeed;
 
     public float m_waveSpeed;
+    public float m_waveMaxDistance;
     public float m_waveMinPower;
     public float m_waveMaxPower;
     [Range(0.0f, 360.0f)] public float m_waveAngle;
     public float m_waveMinWidth;
-    public float m_waveMaxLength;
 }
 
 [System.Serializable]
@@ -24,6 +24,7 @@ public class HeavyVariables : PlayerVariables
 {
     public GameObject m_blockPolePrefab;
     public float      m_blockPoleLifeTime;
+    public float      m_blockPoleSpawnOffset;
 }
 [System.Serializable]
 public class MediumVariables : PlayerVariables
