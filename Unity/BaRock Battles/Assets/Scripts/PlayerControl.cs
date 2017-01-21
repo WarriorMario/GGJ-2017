@@ -18,16 +18,22 @@ public class PlayerControl : MonoBehaviour
 
     // Player type specific variables
     float m_attackDelayTimeSpent;
-
-    // Use this for initialization
-    void Start ()
+    
+    void Start()
     {
         m_myController = GetComponent<CharacterController>();
 	}
 	
-	// Update is called once per frame
-	void Update ()
+	void Update()
     {
+        // Check if player should die.
+        if(transform.position.y < Defines.PLAYER_MINY)
+        {
+            GameLoop.Instance.NotifyPlayerDeath(this);
+            Destroy(gameObject);
+        }
+
+
         GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
         PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
         Scheme            controls   = gameVars.m_controls;
@@ -175,10 +181,5 @@ public class PlayerControl : MonoBehaviour
     public void GetHitByWave(ReversedWave a_wave)
     {
         m_moveDir += a_wave.Direction * a_wave.GetPower();
-    }
-
-    public void GetHitByDeathPlane()
-    {
-        Destroy(gameObject);
     }
 }

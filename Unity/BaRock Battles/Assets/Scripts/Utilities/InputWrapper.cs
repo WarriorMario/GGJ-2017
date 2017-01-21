@@ -105,6 +105,38 @@ namespace InputWrapper
         //======================
         // Events
         //======================
+        public int GetDownOnAnyController(EKeyId a_Id)
+        {
+            Key k = GetKey(a_Id);
+
+            switch (Defines.KEY_MODE)
+            {
+                case EKeyMode.EKeyMode_PrioritizeKeyboard:
+                    {
+                        if (Input.GetKeyDown(k.key)) return 1;
+                        if (k.button != EButton.EButton_None)
+                        {
+                            for (int i = 0; i < Defines.KEY_MAXCONTROLLERS; i++)
+                            {
+                                if (Input.GetKeyDown("joystick " + (i+1) + " button " + (int)k.button)) return i+1;
+                            }
+                        }
+                    }
+                    return -1;
+                case EKeyMode.EKeyMode_PrioritizeController:
+                    {
+                        if (k.button != EButton.EButton_None)
+                        {
+                            for (int i = 0; i < Defines.KEY_MAXCONTROLLERS; i++)
+                            {
+                                if (Input.GetKeyDown("joystick " + (i + 1) + " button " + (int)k.button)) return i + 1;
+                            }
+                            if (Input.GetKeyDown(k.key)) return 1;
+                        }
+                    }
+                    return -1;
+            }
+        }
         public bool GetDown(EKeyId a_Id, int a_DeviceId)
         {
             Key k = GetKey(a_Id);
@@ -124,7 +156,6 @@ namespace InputWrapper
                     }
                     return false;
             }
-            return false;
         }
         public bool GetHold(EKeyId a_Id, int a_DeviceId)
         {
@@ -145,7 +176,6 @@ namespace InputWrapper
                     }
                     return false;
             }
-            return false;
         }
         public float GetPress(EKeyPairId a_Id, int a_DeviceId)
         {
@@ -188,7 +218,6 @@ namespace InputWrapper
                     }
                     return 0.0f;
             }
-            return 0.0f;
         }
         public Vector2 GetPressAsAxis(EKeyPairId a_HorizontalId, EKeyPairId a_VerticalId, int a_DeviceId)
         {
@@ -202,7 +231,7 @@ namespace InputWrapper
         //======================
         [SerializeField] Key     m_Action1;
         [SerializeField] Key     m_Action2;
-
+        
         [SerializeField] Key     m_Confirm;
         [SerializeField] Key     m_Cancel;
         [SerializeField] Key     m_Start;

@@ -1,13 +1,14 @@
-﻿using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine;
+using InputWrapper;
+
 
 public class GameLoop : MonoBehaviour
 {
     public GameplayVariables m_gameplayVariables;
     
-    private PlayerControl[] m_players;
-    public PlayerControl[] Players
+    private List<PlayerControl> m_players = new List<PlayerControl>();
+    public List<PlayerControl> Players
     {
         get
         {
@@ -55,13 +56,46 @@ public class GameLoop : MonoBehaviour
         }
         ms_instance = this;
 
-        m_players = FindObjectsOfType<PlayerControl>();
+        m_players.AddRange(FindObjectsOfType<PlayerControl>());
 
         // ...
     }
 	
 	void Update()
     {
+        Scheme controls = m_gameplayVariables.m_controls;
+
+        int controllerId = controls.GetDownOnAnyController(EKeyId.EKeyId_Confirm);
+        if (controllerId != -1)
+        {
+            Debug.Log("Controller " + controllerId + " registered");
+        }
+
         // ...
+    }
+
+    void OnGUI()
+    {
+        Rect rect = new Rect(0.0f, 25.0f, 250.0f, 50.0f);
+        rect.x = Screen.width / 2.0f - rect.width / 2.0f;
+
+        if (m_players.Count == 1)
+        {
+            GUI.TextArea(rect, "Player " + m_players[0].m_playerType.ToString() + " won the game");
+
+            // End game
+        }
+        else
+        {
+            GUI.TextArea(rect, m_players.Count + " players left");
+        }
+    }
+
+    public void NotifyPlayerDeath(PlayerControl a_player)
+    {
+        if (m_players.Exists(x => x.m_controlId == a_player.m_controlId))
+        {
+            m_players.Remove(a_player);
+        }
     }
 }
