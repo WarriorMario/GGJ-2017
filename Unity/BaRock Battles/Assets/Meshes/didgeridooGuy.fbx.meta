@@ -1,17 +1,15 @@
 fileFormatVersion: 2
-guid: 43c28b66a2aaa484e93ee7e36863c3be
-timeCreated: 1485003211
+guid: 8395e53479ae5ab499c6d7aa54f5f1bd
+timeCreated: 1485012679
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: default
-    100002: //RootNode
-    400000: default
-    400002: //RootNode
-    2300000: default
-    3300000: default
-    4300000: default
+    100000: //RootNode
+    400000: //RootNode
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: pCylinder13
   materials:
     importMaterials: 1
     materialName: 0
