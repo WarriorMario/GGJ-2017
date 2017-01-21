@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 02a1d908461429745b1d18769a7ba73d
-timeCreated: 1485013236
+guid: 6e3488c000421514b925cfbd75996454
+timeCreated: 1485034451
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,8 +9,8 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: warDrumGuy:Mesh
-    4300002: warDrumGuy1:Mesh
+    4300000: lightGuyLow:Group1
+    9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -73,7 +73,7 @@ ModelImporter:
     hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 0
+  animationType: 2
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
