@@ -45,12 +45,12 @@ public class ParticleTriggers : MonoBehaviour {
 
     public void SpawnShieldParticle(BlockPole a_pole)
     {
-
+        Instantiate(m_fatCloudParticle, a_pole.transform);
     }
 
     public void SpawnCloneParticle(PlayerControl a_player)
     {
-
+        Instantiate(m_fatCloudParticle, a_player.transform);
     }
 
     public void SpawnDodgeParticle(PlayerControl a_player)
