@@ -80,8 +80,9 @@ public class Wave : MonoBehaviour
     public float GetPower()
     {
         float distanceTraveled = (transform.position - m_startPos).magnitude;
-        float powerScale       = Mathf.Max(distanceTraveled / m_maxLength, 1.0f);
-        float power            = m_minPower + (m_maxPower - m_minPower) * powerScale;
+        float scale = Mathf.Max(distanceTraveled / m_maxLength, 1.0f);
+        float sign  = Mathf.Sign(m_maxPower - m_minPower);
+        float power = m_minPower + sign * Mathf.Abs(m_maxPower - m_minPower) * scale;
         return power;
     }
 }
