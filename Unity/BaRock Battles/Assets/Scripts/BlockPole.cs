@@ -27,12 +27,12 @@ public class BlockPole : MonoBehaviour
         if(other.tag == "Wave")
         {
             Wave w = other.GetComponent<Wave>();
-            w.Init(-w.m_dir, m_spawner, w.m_minWidth, w.m_maxLength, w.m_angle, w.m_minPower, w.m_maxPower, transform.position);
+            w.Bounce();
         }
         if (other.tag == "ReversedWave")
         {
             ReversedWave w = other.GetComponent<ReversedWave>();
-            w.Init(-w.m_dir, m_spawner, w.m_minWidth, w.m_maxLength, w.m_angle, w.m_minPower, w.m_maxPower, transform.position + -w.m_dir * w.m_maxLength);
+            w.Bounce();
         }
     }
 }

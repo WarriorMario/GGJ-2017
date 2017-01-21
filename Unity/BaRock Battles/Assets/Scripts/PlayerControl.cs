@@ -135,7 +135,7 @@ public class PlayerControl : MonoBehaviour
     {
         Vector3 spawnPos = transform.position + m_shootDir * m_bulletSpawnOffset;
         Wave bullet = Instantiate(m_heavyBulletPrefab, spawnPos, Quaternion.identity).GetComponent<Wave>();
-        bullet.Init(m_shootDir * m_waveSpeed, m_playerIdx, m_waveMinWidth, m_waveMaxLength, m_waveAngle, m_waveMinPower, m_waveMaxPower, spawnPos);
+        bullet.Init(m_shootDir * m_waveSpeed, m_playerIdx, m_waveMinWidth, m_waveMaxLength, m_waveAngle, m_waveMinPower, m_waveMaxPower);
         m_moveDir -= m_shootDir.normalized * m_shootWaveAccelSpeed;
     }
 
@@ -143,17 +143,17 @@ public class PlayerControl : MonoBehaviour
     {
         Vector3 spawnPos = transform.position + m_shootDir * m_waveMaxLength;
         ReversedWave wave = Instantiate(m_4reversedWavePrefab, spawnPos, Quaternion.identity).GetComponent<ReversedWave>();
-        wave.Init(-m_shootDir * m_waveSpeed, m_playerIdx, m_waveMinWidth, m_waveMaxLength, m_waveAngle, m_waveMinPower, m_waveMaxPower, spawnPos);
+        wave.Init(-m_shootDir * m_waveSpeed, m_playerIdx, m_waveMinWidth, m_waveMaxLength, m_waveAngle, m_waveMinPower, m_waveMaxPower);
         m_moveDir += m_shootDir.normalized * m_shootWaveAccelSpeed;
     }
 
     public void GetHitByWave(Wave a_wave)
     {
-        m_moveDir += a_wave.m_dir.normalized * a_wave.GetPower();
+        m_moveDir += a_wave.Direction * a_wave.GetPower();
     }
     public void GetHitByWave(ReversedWave a_wave)
     {
-        m_moveDir += a_wave.m_dir.normalized * a_wave.GetPower();
+        m_moveDir += a_wave.Direction * a_wave.GetPower();
     }
 
     public void GetHitByDeathPlane()
