@@ -8,7 +8,7 @@ public class CooldownBar : MonoBehaviour
     public const float m_fullWidth = 0.75f;
     public const float m_fullHeight = 0.4f;
 
-    public void Awake()
+    public void Start()
     {
         gameObject.SetActive(false);
     }
@@ -21,6 +21,11 @@ public class CooldownBar : MonoBehaviour
 
     public void UpdateBar(float value)
     {
+        if (!gameObject.activeSelf)
+            return;
+        transform.LookAt(Camera.main.transform.position);
+        transform.Rotate(0.0f, 180.0f, 0.0f);
+
         value = Mathf.Clamp(value, 0.0f, 1.0f);
         m_FillerThingyOfTheHealthBar.transform.localScale = new Vector3(m_fullWidth * value, m_fullHeight, 1.0f);
         float xPos = -m_fullWidth * 0.5f + (m_fullWidth * 0.5f * value);
@@ -32,13 +37,5 @@ public class CooldownBar : MonoBehaviour
     public void Deactivate()
     {
         gameObject.SetActive(false);
-    }
-
-    private void FixedUpdate()
-    {
-        if (!gameObject.activeSelf)
-            return;
-        transform.LookAt(Camera.main.transform.position);
-        transform.Rotate(0.0f, 180.0f, 0.0f);
     }
 }

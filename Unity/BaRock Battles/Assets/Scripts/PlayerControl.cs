@@ -9,6 +9,9 @@ public class PlayerControl : MonoBehaviour
 {
     public Defines.EPlayerType m_playerType;
     public int                 m_controlId;
+    // basic variables
+    public float m_maxYvel;
+    public float m_gravity;
 
     // References.
     CharacterController m_myController;
@@ -36,16 +39,34 @@ public class PlayerControl : MonoBehaviour
     bool  m_speedBoostIsActive;
     float m_speedBoostTimeActive;
 
+    // CooldownBar
+    CooldownBar m_cooldownBar;
+    float m_currentCooldownMaxTime = 0.0f;
+
     
     ///////////////////////////
     // Game loop
     ///////////////////////////
-    void Start()
+    void Awake()
     {
         m_myController = GetComponent<CharacterController>();
+        m_cooldownBar = GetComponentInChildren<CooldownBar>();
     }
+
 	void Update()
     {
+        if(!m_myController.isGrounded)
+        { 
+            if (m_myController.velocity.y > m_maxYvel)
+            {
+                m_moveDir.y -= m_gravity * Time.deltaTime;
+                if(m_moveDir.y > m_maxYvel)
+                {
+                    m_moveDir.y = m_maxYvel;
+                }
+            }
+        }
+
         // Check if player should die.
         if(transform.position.y < Defines.PLAYER_MINY)
         {
@@ -76,6 +97,8 @@ public class PlayerControl : MonoBehaviour
             if (m_shieldTimeActive > vars.m_blockPoleLifeTime)
             {
                 m_action2CooldownTimer = vars.m_blockPoleCooldown;
+                m_currentCooldownMaxTime = vars.m_blockPoleCooldown;
+                m_cooldownBar.Activate();
 
                 m_shieldTimeActive = 0.0f;
                 m_shieldIsActive = false;
@@ -100,6 +123,8 @@ public class PlayerControl : MonoBehaviour
             if (m_speedBoostTimeActive > vars.m_speedBoostDuration)
             {
                 m_action2CooldownTimer = vars.m_speedBoostCooldown;
+                m_currentCooldownMaxTime = vars.m_speedBoostCooldown;
+                m_cooldownBar.Activate();
 
                 m_speedBoostTimeActive = 0.0f;
                 m_speedBoostIsActive = false;
@@ -149,6 +174,15 @@ public class PlayerControl : MonoBehaviour
         if (m_shieldIsActive) return;
 
         m_action2CooldownTimer -= Time.deltaTime;
+        if(m_action2CooldownTimer < 0.0f)
+        {
+            if(m_cooldownBar.gameObject.activeSelf)
+                m_cooldownBar.Deactivate();
+        }
+        else
+        {
+            m_cooldownBar.UpdateBar(1.0f - (m_action2CooldownTimer / m_currentCooldownMaxTime));
+        }
         if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId) && m_action2CooldownTimer <= 0.0f)
         {
             PerformAction2();
@@ -227,6 +261,8 @@ public class PlayerControl : MonoBehaviour
         Destroy(m_clone.gameObject);
         m_clone = null;
         m_action2CooldownTimer = lightVars.m_cloneCooldown;
+        m_currentCooldownMaxTime = lightVars.m_cloneCooldown;
+        m_cooldownBar.Activate();
     }
     void PerformAction2()
     {
@@ -280,6 +316,8 @@ public class PlayerControl : MonoBehaviour
                         m_moveDir += strangeVars.m_dodgePower * transform.forward;
                     }
                     m_action2CooldownTimer = strangeVars.m_dodgeCooldown;
+                    m_currentCooldownMaxTime = strangeVars.m_dodgeCooldown;
+                    m_cooldownBar.Activate();
 
                     break;
                 }
