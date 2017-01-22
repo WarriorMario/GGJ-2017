@@ -13,6 +13,8 @@ ModelImporter:
     100010: platform_groundplane
     100012: support_structure
     100014: floor
+    100016: gold_marble
+    100018: marble_marble_pillar
     400000: carpet
     400002: marble_dark
     400004: marble_light
@@ -21,6 +23,8 @@ ModelImporter:
     400010: platform_groundplane
     400012: support_structure
     400014: floor
+    400016: gold_marble
+    400018: marble_marble_pillar
     2300000: carpet
     2300002: marble_dark
     2300004: marble_light
@@ -28,6 +32,8 @@ ModelImporter:
     2300008: platform_groundplane
     2300010: support_structure
     2300012: floor
+    2300014: gold_marble
+    2300016: marble_marble_pillar
     3300000: carpet
     3300002: marble_dark
     3300004: marble_light
@@ -35,6 +41,8 @@ ModelImporter:
     3300008: platform_groundplane
     3300010: support_structure
     3300012: floor
+    3300014: gold_marble
+    3300016: marble_marble_pillar
     4300000: carpet
     4300002: marble_dark
     4300004: marble_light
@@ -42,6 +50,8 @@ ModelImporter:
     4300008: platform_groundplane
     4300010: support_structure
     4300012: floor
+    4300014: gold_marble
+    4300016: marble_marble_pillar
   materials:
     importMaterials: 1
     materialName: 0
