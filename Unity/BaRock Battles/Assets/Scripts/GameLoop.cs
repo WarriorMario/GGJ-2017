@@ -6,7 +6,8 @@ using InputWrapper;
 public class GameLoop : MonoBehaviour
 {
     public GameplayVariables m_gameplayVariables;
-    
+    public ParticleTriggers m_particleTriggers;
+
     private List<PlayerControl> m_players = new List<PlayerControl>();
     public List<PlayerControl> Players
     {
@@ -96,9 +97,13 @@ public class GameLoop : MonoBehaviour
         if (m_players.Exists(x => x.m_controlId == a_player.m_controlId))
         {
             m_players.Remove(a_player);
+
+            Trigger.PlayerDies(a_player);
         }
         if(m_players.Count==1)// Last man standing
         {
+            Trigger.PlayerWins(a_player);
+
             GameObject menu = GameObject.Find("PostGameMenu");
             if(menu!=null)
             {

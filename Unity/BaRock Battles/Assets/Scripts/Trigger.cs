@@ -1,86 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Trigger : MonoBehaviour
+
+public class Trigger
 {
-    ParticleTriggers m_particleTriggers;
-    // anim
-
-    public void Init()
+    public static void PlayerDrumAttackWave(PlayerControl a_player, Wave a_wave)
     {
-        m_particleTriggers = FindObjectOfType<ParticleTriggers>();
-
-        // Give a reference of all players to Andrès
-
-    }
-
-    public void PlayerDrumAttackWave(PlayerControl a_player, Wave a_wave)
-    {
-        m_particleTriggers.SpawnDrumParticle(a_player, a_wave);
+        GameLoop.Instance.m_particleTriggers.SpawnDrumParticle(a_player, a_wave);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlayNormalAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("Attack");
     }
 
-    public void PlayerDrumAttackSecondary(PlayerControl a_player, BlockPole a_pole)
+    public static void PlayerDrumAttackSecondary(PlayerControl a_player, BlockPole a_pole)
     {
-        m_particleTriggers.SpawnShieldParticle(a_pole);
+        GameLoop.Instance.m_particleTriggers.SpawnShieldParticle(a_pole);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlaySpecialAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("SpecialAttack");
     }
 
-    public void PlayerViolinAttackWave(PlayerControl a_player, Wave a_wave)
+    public static void PlayerViolinAttackWave(PlayerControl a_player, Wave a_wave)
     {
-        m_particleTriggers.SpawnViolinParticle(a_player, a_wave);
+        GameLoop.Instance.m_particleTriggers.SpawnViolinParticle(a_player, a_wave);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlayNormalAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("Attack");
     }
 
-    public void PlayerViolinAttackSecondary(PlayerControl a_player, Wave a_wave)
+    public static void PlayerViolinAttackSecondary(PlayerControl a_player)
     {
-        m_particleTriggers.SpawnSpeedParticle(a_player);
+        GameLoop.Instance.m_particleTriggers.SpawnSpeedParticle(a_player);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlaySpecialAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("SpecialAttack");
     }
 
-    public void PlayerFluteAttackWave(PlayerControl a_player, Wave a_wave)
+    public static void PlayerFluteAttackWave(PlayerControl a_player, Wave a_wave)
     {
-        m_particleTriggers.SpawnFluteParticle(a_player, a_wave);
+        GameLoop.Instance.m_particleTriggers.SpawnFluteParticle(a_player, a_wave);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlayNormalAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("Attack");
     }
 
-    public void PlayerFluteAttackSecondary(PlayerControl a_player, PlayerControl a_clone)
+    public static void PlayerFluteAttackSecondary(PlayerControl a_player, PlayerControl a_clone)
     {
-        m_particleTriggers.SpawnCloneParticle(a_player);
+        GameLoop.Instance.m_particleTriggers.SpawnCloneParticle(a_player);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlaySpecialAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("SpecialAttack");
     }
 
-    public void PlayerDidgeridooAttack(PlayerControl a_player, PlayerControl a_target)
+    public static void PlayerDidgeridooAttackWave(PlayerControl a_player, Wave a_wave)
     {
-        m_particleTriggers.SpawnDidgeridooParticle(a_player, a_target);
+        GameLoop.Instance.m_particleTriggers.SpawnDidgeridooParticle(a_player, a_wave);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlayNormalAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("Attack");
     }
 
-    public void PlayerDigeridooAttackSecondary(PlayerControl a_player)
+    public static void PlayerDigeridooAttackSecondary(PlayerControl a_player)
     {
-        m_particleTriggers.SpawnDodgeParticle(a_player);
+        GameLoop.Instance.m_particleTriggers.SpawnDodgeParticle(a_player);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlaySpecialAttackSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("SpecialAttack");
     }
 
-    public void PlayerDies(PlayerControl a_player)
+    public static void PlayerDies(PlayerControl a_player)
     {
-        m_particleTriggers.SpawnDroppingParticle(a_player);
+        GameLoop.Instance.m_particleTriggers.SpawnDroppingParticle(a_player);
         a_player.transform.GetComponentInChildren<PlayerAudio>().PlayDeathSound();
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("Death");
     }
 
-    public void PlayerWins(PlayerControl a_player)
+    public static void PlayerWins(PlayerControl a_player)
     {
-        m_particleTriggers.SpawnVictoryParticle(a_player);
+        GameLoop.Instance.m_particleTriggers.SpawnVictoryParticle(a_player);
         // Implement win sound
     }
 }

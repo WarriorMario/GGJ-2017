@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: 3cddd87db8f1a6c4980a4260c74a173b
+timeCreated: 1485073372
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: didgeridoo2
+    100002: //RootNode
+    100004: L_prop_jnt
+    100006: meshGrp
+    100008: prop_cntr_jnt
+    100010: R_prop_jnt
+    100012: Slave_head
+    100014: Slave_head1
+    100016: Slave_L_ankle
+    100018: Slave_L_ball
+    100020: Slave_L_clavicle
+    100022: Slave_L_elbow
+    100024: Slave_L_hip
+    100026: Slave_L_knee
+    100028: Slave_L_shoulder
+    100030: Slave_L_wrist
+    100032: Slave_pelvis
+    100034: Slave_R_ankle
+    100036: Slave_R_ball
+    100038: Slave_R_clavicle
+    100040: Slave_R_elbow
+    100042: Slave_R_hip
+    100044: Slave_R_knee
+    100046: Slave_R_shoulder
+    100048: Slave_R_wrist
+    100050: Slave_torso
+    100052: Slave_waist
+    400000: didgeridoo2
+    400002: //RootNode
+    400004: L_prop_jnt
+    400006: meshGrp
+    400008: prop_cntr_jnt
+    400010: R_prop_jnt
+    400012: Slave_head
+    400014: Slave_head1
+    400016: Slave_L_ankle
+    400018: Slave_L_ball
+    400020: Slave_L_clavicle
+    400022: Slave_L_elbow
+    400024: Slave_L_hip
+    400026: Slave_L_knee
+    400028: Slave_L_shoulder
+    400030: Slave_L_wrist
+    400032: Slave_pelvis
+    400034: Slave_R_ankle
+    400036: Slave_R_ball
+    400038: Slave_R_clavicle
+    400040: Slave_R_elbow
+    400042: Slave_R_hip
+    400044: Slave_R_knee
+    400046: Slave_R_shoulder
+    400048: Slave_R_wrist
+    400050: Slave_torso
+    400052: Slave_waist
+    4300000: didgeridoo2
+    7400000: Take 001
+    9500000: //RootNode
+    13700000: didgeridoo2
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

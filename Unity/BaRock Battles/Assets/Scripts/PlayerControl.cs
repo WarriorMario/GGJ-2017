@@ -57,6 +57,7 @@ public class PlayerControl : MonoBehaviour
             else
             {
                 GameLoop.Instance.NotifyPlayerDeath(this);
+                GetComponentInChildren<PlayerAudio>().Detach();
                 Destroy(gameObject);
             }
         }
@@ -112,8 +113,10 @@ public class PlayerControl : MonoBehaviour
         
         if (m_isClone)
         {
-            movement = -movement;
-            dir      = -dir;
+            //movement = -movement;
+            //dir      = -dir;
+            movement.x = -movement.x;
+            dir.x      = -dir.x;
         }
 
         movement *= playerVars.m_movementAccelerationSpeed * Time.deltaTime;
@@ -158,7 +161,7 @@ public class PlayerControl : MonoBehaviour
     //////////////////////////////
     // Action 1
     //////////////////////////////
-    void FireWave(GameObject a_prefab, Vector3 a_start, Vector3 a_dir, float a_sign)
+    Wave FireWave(GameObject a_prefab, Vector3 a_start, Vector3 a_dir, float a_sign)
     {
         PlayerVariables vars = GameLoop.Instance.GetPlayerVariables(m_playerType);
         
@@ -166,6 +169,9 @@ public class PlayerControl : MonoBehaviour
 
         wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, a_sign, vars.m_waveMaxDistance, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
         m_moveDir -= a_dir * vars.m_attackAccelerationSpeed;
+
+        return wave;
+        Trigger.PlayerDrumAttackWave(this, wave);
     }
     void PerformAction1()
     {
@@ -175,24 +181,44 @@ public class PlayerControl : MonoBehaviour
         switch (m_playerType)
         {
             case Defines.EPlayerType.heavy: // Drums
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right, 1.0f);
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset,  transform.right, 1.0f);
+
+                Trigger.PlayerDrumAttackWave(
+                    this,
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right, 1.0f)
+                );
+                Trigger.PlayerDrumAttackWave(
+                    this,
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, transform.right, 1.0f)
+                );
+
                 m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
-                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f);
+                Trigger.PlayerViolinAttackWave(
+                    this,
+                    FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f)
+                );
+
                 m_action1CooldownTimer = gameVars.m_medium.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.light: // Flute
-                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f);
+                Trigger.PlayerFluteAttackWave(
+                    this,
+                    FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f)
+                );
                 if (m_clone != null)
                 {
                     RemoveClone();
                 }
+
                 m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward, -1.0f);
+                Trigger.PlayerDidgeridooAttackWave(
+                    this,
+                    FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward, -1.0f)
+                );
+                
                 m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
                 break;
         }
@@ -201,7 +227,7 @@ public class PlayerControl : MonoBehaviour
     //////////////////////////////
     // Action 2
     //////////////////////////////
-    void SpawnClone()
+    PlayerControl SpawnClone()
     {
         GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
         LightVariables lightVars = gameVars.m_light;
@@ -218,6 +244,8 @@ public class PlayerControl : MonoBehaviour
         float sign = (int)(Random.value + 0.5f);
         clone.transform.position += splitOffset * sign;
         transform.position       += splitOffset * -sign;
+
+        return clone;
     }
     void RemoveClone()
     {
@@ -243,11 +271,15 @@ public class PlayerControl : MonoBehaviour
                     p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
 
                     m_shieldIsActive = true;
+
+                    Trigger.PlayerDrumAttackSecondary(this, p);
                 }
                 break;
             case Defines.EPlayerType.medium: // Violin
                 {
                     MediumVariables mediumVars = gameVars.m_medium;
+
+                    Trigger.PlayerViolinAttackSecondary(this);
 
                     m_speedBoostIsActive = true;
 
@@ -256,10 +288,13 @@ public class PlayerControl : MonoBehaviour
             case Defines.EPlayerType.light: // Flute
                 {
                     LightVariables lightVars = gameVars.m_light;
-
-                    if(m_clone == null)
+                    
+                    if (m_clone == null)
                     {
-                        SpawnClone();
+                        Trigger.PlayerFluteAttackSecondary(
+                            this,
+                            SpawnClone()
+                        );
                     }
 
                     break;
@@ -279,6 +314,8 @@ public class PlayerControl : MonoBehaviour
                     {
                         m_moveDir += strangeVars.m_dodgePower * transform.forward;
                     }
+                    Trigger.PlayerDigeridooAttackSecondary(this);
+
                     m_action2CooldownTimer = strangeVars.m_dodgeCooldown;
 
                     break;
