@@ -16,6 +16,10 @@ public class PlayerControl : MonoBehaviour
     Vector3 m_moveDir; // current velocity vector
 
     // Player type specific variables
+    float m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay;
+    bool m_actionButtonPressed = false;
+    static int ms_MadPropsForBeingAweesomeProgrammer = 0;
+
     float m_action1CooldownTimer;
     float m_action2CooldownTimer;
 
@@ -87,9 +91,6 @@ public class PlayerControl : MonoBehaviour
             {
                 RemoveClone();
             }
-
-            movement = -movement;
-            dir = -dir;
         }
         if (m_speedBoostIsActive)
         {
@@ -127,10 +128,22 @@ public class PlayerControl : MonoBehaviour
 
         if (m_isClone) return;
 
+        if(m_actionButtonPressed)
+        {
+            m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay += Time.deltaTime;
+            if (m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay > playerVars.m_waveSpawnDelay)
+            {
+                PerformAction1();
+                m_actionButtonPressed = false;
+                m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay = 0.0f;
+                ms_MadPropsForBeingAweesomeProgrammer++;
+            }
+        }
+
         m_action1CooldownTimer -= Time.deltaTime;
         if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId) && m_action1CooldownTimer <= 0.0f)
         {
-            PerformAction1();
+            m_actionButtonPressed = true;
         }
 
         if (m_shieldIsActive) return;
@@ -162,8 +175,8 @@ public class PlayerControl : MonoBehaviour
         switch (m_playerType)
         {
             case Defines.EPlayerType.heavy: // Drums
-                FireWave(gameVars.m_wavePrefab, transform.position, -transform.right);
-                FireWave(gameVars.m_wavePrefab, transform.position,  transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset,  transform.right);
                 m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
@@ -255,7 +268,17 @@ public class PlayerControl : MonoBehaviour
                 {
                     StrangeVariables strangeVars = gameVars.m_strange;
 
-                    m_moveDir += strangeVars.m_dodgePower * transform.forward;
+                    Vector2 lsd = gameVars.m_controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
+                    if (lsd.sqrMagnitude > 0)
+                    {
+                        Vector3 res = new Vector3(lsd.x, 0.0f, lsd.y);
+                        
+                        m_moveDir += strangeVars.m_dodgePower * res.normalized;
+                    }
+                    else
+                    {
+                        m_moveDir += strangeVars.m_dodgePower * transform.forward;
+                    }
                     m_action2CooldownTimer = strangeVars.m_dodgeCooldown;
 
                     break;

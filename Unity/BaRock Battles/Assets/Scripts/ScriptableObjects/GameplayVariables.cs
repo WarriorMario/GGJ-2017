@@ -11,6 +11,7 @@ public class PlayerVariables
     public float m_attackDelayTime;
     public float m_attackAccelerationSpeed;
 
+    public float m_waveSpawnDelay;
     public float m_waveSpeed;
     public float m_waveMaxDistance;
     public float m_waveMinPower;
@@ -26,6 +27,7 @@ public class HeavyVariables : PlayerVariables
     public float      m_blockPoleLifeTime;
     public float      m_blockPoleSpawnOffset;
     public float      m_blockPoleCooldown;
+    public float      m_waveToDrumOffset;
 }
 [System.Serializable]
 public class MediumVariables : PlayerVariables
