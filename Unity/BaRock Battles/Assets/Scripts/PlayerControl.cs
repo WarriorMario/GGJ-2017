@@ -158,13 +158,13 @@ public class PlayerControl : MonoBehaviour
     //////////////////////////////
     // Action 1
     //////////////////////////////
-    void FireWave(GameObject a_prefab, Vector3 a_start, Vector3 a_dir)
+    void FireWave(GameObject a_prefab, Vector3 a_start, Vector3 a_dir, float a_sign)
     {
         PlayerVariables vars = GameLoop.Instance.GetPlayerVariables(m_playerType);
         
         Wave wave = Instantiate(a_prefab, a_start, Quaternion.identity).GetComponent<Wave>();
 
-        wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxDistance, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
+        wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, a_sign, vars.m_waveMaxDistance, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
         m_moveDir -= a_dir * vars.m_attackAccelerationSpeed;
     }
     void PerformAction1()
@@ -175,16 +175,16 @@ public class PlayerControl : MonoBehaviour
         switch (m_playerType)
         {
             case Defines.EPlayerType.heavy: // Drums
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right);
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset,  transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right, 1.0f);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset,  transform.right, 1.0f);
                 m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
-                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
+                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f);
                 m_action1CooldownTimer = gameVars.m_medium.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.light: // Flute
-                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
+                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f);
                 if (m_clone != null)
                 {
                     RemoveClone();
@@ -192,7 +192,7 @@ public class PlayerControl : MonoBehaviour
                 m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward, -1.0f);
                 m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
                 break;
         }
@@ -294,6 +294,13 @@ public class PlayerControl : MonoBehaviour
 
     public void GetHitByWave(Wave a_wave)
     {
-        m_moveDir += a_wave.GetForce(transform.position);
+        if(m_playerType == Defines.EPlayerType.strange)
+        {
+            m_moveDir += a_wave.GetForce();
+        }
+        else
+        {
+            m_moveDir += a_wave.GetForce(transform.position);
+        }
     }
 }

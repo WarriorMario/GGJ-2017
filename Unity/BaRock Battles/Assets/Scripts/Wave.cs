@@ -8,7 +8,8 @@ public class Wave : MonoBehaviour
     // Wave properties
     float m_distance;
     float m_maxDistance;
-    float m_minWidth;
+    float m_startWidth;
+    float m_widthSign;
     float m_angle;
     float m_tanAngle;
     float m_minPower;
@@ -22,11 +23,12 @@ public class Wave : MonoBehaviour
     List<int> m_immunePlayers;
 
 	// Use this for initialization
-	public void Init (Vector3 a_dir, int a_spawnerId, float a_minWidth, float a_maxDistance, float a_angle, float a_minPower, float a_maxPower)
+	public void Init (Vector3 a_dir, int a_spawnerId, float a_startWidth, float a_widthSign, float a_maxDistance, float a_angle, float a_minPower, float a_maxPower)
     {
         m_dir       = a_dir;
         m_maxDistance = a_maxDistance;
-        m_minWidth  = a_minWidth;
+        m_startWidth = a_startWidth;
+        m_widthSign = a_widthSign;
         m_angle     = a_angle;
         m_minPower  = a_minPower;
         m_maxPower  = a_maxPower;
@@ -44,7 +46,7 @@ public class Wave : MonoBehaviour
 
         transform.LookAt(transform.position + a_dir);
         Vector3 scale = transform.localScale;
-        scale.x = m_minWidth;
+        scale.x = m_startWidth;
         transform.localScale = scale;
     }
 
@@ -59,7 +61,7 @@ public class Wave : MonoBehaviour
 
         float opposite = m_distance * m_tanAngle;
         Vector3 scale = transform.localScale;
-        scale.x = opposite + m_minWidth;
+        scale.x = m_startWidth + opposite * m_widthSign;
         transform.localScale = scale;
     }
 
@@ -87,6 +89,15 @@ public class Wave : MonoBehaviour
         transform.forward = a_newDirection;
         m_myRigidBody.velocity = a_newDirection * m_myRigidBody.velocity.magnitude;
         m_immunePlayers.Clear();
+    }
+    public Vector3 GetForce()
+    {
+        float scale = Mathf.Clamp(m_distance / m_maxDistance, 0.0f, 1.0f);
+        float sign = Mathf.Sign(m_maxPower - m_minPower);
+        float power = m_minPower + sign * Mathf.Abs(m_maxPower - m_minPower) * scale;
+
+        Vector3 force = (transform.position - m_startPos).normalized * power;
+        return force;
     }
     public Vector3 GetForce(Vector3 a_position)
     {
