@@ -164,19 +164,23 @@ public class PlayerControl : MonoBehaviour
             case Defines.EPlayerType.heavy: // Drums
                 FireWave(gameVars.m_wavePrefab, transform.position, -transform.right);
                 FireWave(gameVars.m_wavePrefab, transform.position,  transform.right);
+                m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
                 FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
+                m_action1CooldownTimer = gameVars.m_medium.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.light: // Flute
                 FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
-                if(m_clone != null)
+                if (m_clone != null)
                 {
                     RemoveClone();
                 }
+                m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
                 FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
+                m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
                 break;
         }
     }
