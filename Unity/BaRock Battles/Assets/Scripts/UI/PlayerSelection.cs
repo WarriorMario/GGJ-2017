@@ -64,7 +64,7 @@ public class PlayerSelection : MonoBehaviour
             selection.GetComponent<Image>().color = m_PlayerColors[playerIndex] *0.8f;
             if(m_LockedPlayers.FindAll(x=>x.Equals(-1)).Count == m_PlayerIDs.FindAll(x => x.Equals(-1)).Count)
             {
-                DelayedLoad();
+                StartCoroutine(DelayedLoad());
             }
         }
     }

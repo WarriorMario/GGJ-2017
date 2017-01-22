@@ -97,5 +97,18 @@ public class GameLoop : MonoBehaviour
         {
             m_players.Remove(a_player);
         }
+        if(m_players.Count==1)// Last man standing
+        {
+            GameObject menu = GameObject.Find("PostGameMenu");
+            if(menu!=null)
+            {
+                menu.SetActive(true);
+            }
+            else
+            {
+                // Reload scene
+                UnityEngine.SceneManagement.SceneManager.LoadScene(m_gameplayVariables.m_ArenaSceneName);
+            }
+        }
     }
 }
