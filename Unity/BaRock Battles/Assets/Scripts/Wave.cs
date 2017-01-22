@@ -37,6 +37,7 @@ public class Wave : MonoBehaviour
         m_immunePlayers = new List<int>();
 
         // Save player properties
+        m_startPos = transform.position;
         m_previousPos = transform.position;
         m_myRigidBody.velocity = m_dir;
         m_immunePlayers.Add(a_spawnerId);
@@ -81,15 +82,18 @@ public class Wave : MonoBehaviour
     }
     public void Redirect(Vector3 a_newDirection)
     {
+        m_startPos = transform.position;
         transform.forward = a_newDirection;
         m_myRigidBody.velocity = a_newDirection * m_myRigidBody.velocity.magnitude;
         m_immunePlayers.Clear();
     }
-    public float GetPower()
+    public Vector3 GetForce(Vector3 a_position)
     {
         float scale = Mathf.Clamp(m_distance / m_maxDistance, 0.0f, 1.0f);
         float sign  = Mathf.Sign(m_maxPower - m_minPower);
         float power = m_minPower + sign * Mathf.Abs(m_maxPower - m_minPower) * scale;
-        return power;
+        
+        Vector3 force = (a_position - m_startPos).normalized * power;
+        return force;
     }
 }

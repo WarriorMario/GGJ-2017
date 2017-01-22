@@ -25,33 +25,45 @@ public class HeavyVariables : PlayerVariables
     public GameObject m_blockPolePrefab;
     public float      m_blockPoleLifeTime;
     public float      m_blockPoleSpawnOffset;
+    public float      m_blockPoleCooldown;
 }
 [System.Serializable]
 public class MediumVariables : PlayerVariables
 {
-    public GameObject m_blockPolePrefab;
+    // ...
 }
 [System.Serializable]
 public class LightVariables : PlayerVariables
 {
-    public GameObject m_blockPolePrefab;
+    public float m_cloneSpawnOffset;
+    public float m_cloneLifetime;
+    public float m_cloneCooldown;
 }
 [System.Serializable]
 public class StrangeVariables : PlayerVariables
 {
     public float m_waveSpawnOffset;
+    public float m_dodgePower;
+    public float m_dodgeCooldown;
 }
 
 
 public class GameplayVariables : ScriptableObject
 {
+    public string m_ArenaSceneName;
+    public string m_MainMenuSceneName;
+
+    [Space()]
+
     [Header("General settings")]
     public Scheme     m_controls;
     public GameObject m_wavePrefab;
+    public GameObject m_heavyPrefab;
+    public GameObject m_mediumPrefab;
+    public GameObject m_lightPrefab;
+    public GameObject m_strangePrefab;
 
     [Space()]
-    public string m_ArenaSceneName;
-    public string m_MainMenuSceneName;
 
     [Header("Player type specific")]
     public HeavyVariables   m_heavy;

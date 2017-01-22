@@ -16,47 +16,77 @@ public class PlayerControl : MonoBehaviour
     Vector3 m_moveDir; // current velocity vector
 
     // Player type specific variables
-    float m_attackDelayTimeSpent;
+    float m_action1CooldownTimer;
+    float m_action2CooldownTimer;
+
+    PlayerControl m_clone;
+    bool          m_isClone;
+    float         m_cloneTimeAlive;
     
     void Start()
     {
         m_myController = GetComponent<CharacterController>();
 	}
-	
 	void Update()
     {
         // Check if player should die.
         if(transform.position.y < Defines.PLAYER_MINY)
         {
-            GameLoop.Instance.NotifyPlayerDeath(this);
-            Destroy(gameObject);
+            if(m_isClone)
+            {
+                RemoveClone();
+                return;
+            }
+            else
+            {
+                GameLoop.Instance.NotifyPlayerDeath(this);
+                Destroy(gameObject);
+            }
         }
-
 
         GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
         PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
         Scheme            controls   = gameVars.m_controls;
 
         Vector2 movement = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
+        Vector2 dir      = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
+        
+        if(m_clone != null)
+        {
+            LightVariables vars = gameVars.m_light;
+
+            // Auto de-spawn.
+            m_clone.m_cloneTimeAlive += Time.deltaTime;
+            if (m_clone.m_cloneTimeAlive > vars.m_cloneLifetime)
+            {
+                RemoveClone();
+            }
+        }
+        if (m_isClone)
+        {
+            movement = -movement;
+            dir = -dir;
+        }
+
         movement *= playerVars.m_movementAccelerationSpeed * Time.deltaTime;
         m_moveDir += new Vector3(movement.x, 0.0f, movement.y);
         m_moveDir -= m_moveDir * playerVars.m_movementDrag * Time.deltaTime;
         m_myController.SimpleMove(m_moveDir);
-
-        Vector2 dir = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
+        
         if (dir != Vector2.zero)
         {
             transform.forward = new Vector3(dir.x, 0.0f, dir.y).normalized;
         }
 
-        m_attackDelayTimeSpent += Time.deltaTime;
-        if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId) && m_attackDelayTimeSpent >= playerVars.m_attackDelayTime)
+        if (m_isClone) return;
+
+        m_action1CooldownTimer -= Time.deltaTime;
+        if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId) && m_action1CooldownTimer <= 0.0f)
         {
             PerformAction1();
-
-            m_attackDelayTimeSpent = 0.0f;
         }
-        if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId))
+        m_action2CooldownTimer -= Time.deltaTime;
+        if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId) && m_action2CooldownTimer <= 0.0f)
         {
             PerformAction2();
         }
@@ -81,15 +111,21 @@ public class PlayerControl : MonoBehaviour
 
         switch (m_playerType)
         {
-            case Defines.EPlayerType.heavy:
+            case Defines.EPlayerType.heavy: // Drums
                 FireWave(gameVars.m_wavePrefab, transform.position, -transform.right);
                 FireWave(gameVars.m_wavePrefab, transform.position,  transform.right);
                 break;
-            case Defines.EPlayerType.medium:
-            case Defines.EPlayerType.light:
+            case Defines.EPlayerType.medium: // Violin
                 FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
                 break;
-            case Defines.EPlayerType.strange: // A.k.a didgeridoo guy
+            case Defines.EPlayerType.light: // Flute
+                FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
+                if(m_clone != null)
+                {
+                    RemoveClone();
+                }
+                break;
+            case Defines.EPlayerType.strange: // Didgeridoo
                 FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
                 break;
         }
@@ -98,6 +134,33 @@ public class PlayerControl : MonoBehaviour
     //////////////////////////////
     // Action 2
     //////////////////////////////
+    void SpawnClone()
+    {
+        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
+        LightVariables lightVars = gameVars.m_light;
+
+        // Spawn clone.
+        Vector3 splitPos = transform.position;
+        PlayerControl clone = Instantiate(gameVars.m_lightPrefab, splitPos, transform.rotation).GetComponent<PlayerControl>();
+        clone.m_controlId = m_controlId;
+        clone.m_isClone = true;
+        m_clone = clone;
+
+        // Move players away from eachother (left, right).
+        Vector3 splitOffset = lightVars.m_cloneSpawnOffset * transform.right;
+        float sign = (int)(Random.value + 0.5f);
+        clone.transform.position += splitOffset * sign;
+        transform.position       += splitOffset * -sign;
+    }
+    void RemoveClone()
+    {
+        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
+        LightVariables lightVars = gameVars.m_light;
+
+        Destroy(m_clone.gameObject);
+        m_clone = null;
+        m_action2CooldownTimer = lightVars.m_cloneCooldown;
+    }
     void PerformAction2()
     {
         GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
@@ -105,15 +168,17 @@ public class PlayerControl : MonoBehaviour
 
         switch (m_playerType)
         {
-            case Defines.EPlayerType.heavy:
+            case Defines.EPlayerType.heavy: // Drums
                 {
                     HeavyVariables heavyVars = gameVars.m_heavy;
                     
                     BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position + transform.forward * heavyVars.m_blockPoleSpawnOffset, transform.rotation).GetComponent<BlockPole>();
                     p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
+
+                    m_action2CooldownTimer = heavyVars.m_blockPoleCooldown;
                 }
                 break;
-            case Defines.EPlayerType.medium:
+            case Defines.EPlayerType.medium: // Violin
                 {
                     MediumVariables mediumVars = gameVars.m_medium;
 
@@ -121,19 +186,23 @@ public class PlayerControl : MonoBehaviour
 
                     break;
                 }
-            case Defines.EPlayerType.light:
+            case Defines.EPlayerType.light: // Flute
                 {
                     LightVariables lightVars = gameVars.m_light;
 
-                    // ...
+                    if(m_clone == null)
+                    {
+                        SpawnClone();
+                    }
 
                     break;
                 }
-            case Defines.EPlayerType.strange: // A.k.a didgeridoo guy
+            case Defines.EPlayerType.strange: // Didgeridoo
                 {
                     StrangeVariables strangeVars = gameVars.m_strange;
-                    
-                    // ...
+
+                    m_moveDir += strangeVars.m_dodgePower * transform.forward;
+                    m_action2CooldownTimer = strangeVars.m_dodgeCooldown;
 
                     break;
                 }
@@ -148,6 +217,6 @@ public class PlayerControl : MonoBehaviour
 
     public void GetHitByWave(Wave a_wave)
     {
-        m_moveDir += a_wave.Direction * a_wave.GetPower();
+        m_moveDir += a_wave.GetForce(transform.position);
     }
 }
