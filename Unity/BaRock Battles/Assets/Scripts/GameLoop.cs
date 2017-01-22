@@ -56,7 +56,11 @@ public class GameLoop : MonoBehaviour
         }
         ms_instance = this;
 
+        GetComponent<StaticPlayerManager>().SpawnPlayers();
+
         m_players.AddRange(FindObjectsOfType<PlayerControl>());
+
+
 
         // ...
     }

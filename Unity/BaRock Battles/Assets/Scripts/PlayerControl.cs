@@ -8,14 +8,14 @@ using InputWrapper;
 public class PlayerControl : MonoBehaviour
 {
     public Defines.EPlayerType m_playerType;
-    public int                 m_controlId;
+    public int m_controlId;
+
     // basic variables
     public float m_maxYvel;
-    public float m_gravity;
 
     // References.
     CharacterController m_myController;
-    
+
     Vector3 m_moveDir; // current velocity vector
 
     // Player type specific variables
@@ -27,23 +27,23 @@ public class PlayerControl : MonoBehaviour
     float m_action2CooldownTimer;
 
     // Shield
-    bool  m_shieldIsActive;
+    bool m_shieldIsActive;
     float m_shieldTimeActive;
 
     // Clone
     PlayerControl m_clone;
-    bool          m_isClone;
-    float         m_cloneTimeAlive;
+    bool m_isClone;
+    float m_cloneTimeAlive;
 
     // Speed boost
-    bool  m_speedBoostIsActive;
+    bool m_speedBoostIsActive;
     float m_speedBoostTimeActive;
 
     // CooldownBar
     CooldownBar m_cooldownBar;
     float m_currentCooldownMaxTime = 0.0f;
 
-    
+
     ///////////////////////////
     // Game loop
     ///////////////////////////
@@ -53,24 +53,23 @@ public class PlayerControl : MonoBehaviour
         m_cooldownBar = GetComponentInChildren<CooldownBar>();
     }
 
-	void Update()
+    void Update()
     {
-        if(!m_myController.isGrounded)
-        { 
-            if (m_myController.velocity.y > m_maxYvel)
+        Vector3 extraOffset = Vector3.zero;
+        extraOffset += Physics.gravity * Time.deltaTime;
+        if (m_myController.velocity.y < m_maxYvel)
+        {
+            if(!m_myController.isGrounded)
             {
-                m_moveDir.y -= m_gravity * Time.deltaTime;
-                if(m_moveDir.y > m_maxYvel)
-                {
-                    m_moveDir.y = m_maxYvel;
-                }
+                m_myController.Move(new Vector3(0.0f, (-m_myController.velocity.y + m_maxYvel) * Time.deltaTime, 0.0f));
+                //extraOffset = new Vector3(0.0f, (-m_myController.velocity.y + m_maxYvel) * Time.deltaTime, 0.0f);
             }
         }
 
         // Check if player should die.
-        if(transform.position.y < Defines.PLAYER_MINY)
+        if (transform.position.y < Defines.PLAYER_MINY)
         {
-            if(m_isClone)
+            if (m_isClone)
             {
                 RemoveClone();
                 return;
@@ -82,13 +81,13 @@ public class PlayerControl : MonoBehaviour
             }
         }
 
-        GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
-        PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
-        Scheme            controls   = gameVars.m_controls;
+        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+        Scheme controls = gameVars.m_controls;
 
         Vector2 movement = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
-        Vector2 dir      = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
-        
+        Vector2 dir = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
+
         if (m_shieldIsActive)
         {
             HeavyVariables vars = GameLoop.Instance.m_gameplayVariables.m_heavy;
@@ -134,18 +133,21 @@ public class PlayerControl : MonoBehaviour
                 movement *= vars.m_speedBoostSpeedScale;
             }
         }
-        
+
         if (m_isClone)
         {
             movement = -movement;
-            dir      = -dir;
+            dir = -dir;
         }
 
-        movement *= playerVars.m_movementAccelerationSpeed * Time.deltaTime;
-        m_moveDir += new Vector3(movement.x, 0.0f, movement.y);
         m_moveDir -= m_moveDir * playerVars.m_movementDrag * Time.deltaTime;
-        m_myController.SimpleMove(m_moveDir);
-        
+        if (m_myController.isGrounded)
+        {
+            movement *= playerVars.m_movementAccelerationSpeed * Time.deltaTime;
+            m_moveDir += new Vector3(movement.x, 0.0f, movement.y);
+        }
+        m_myController.Move(m_moveDir * Time.deltaTime + extraOffset);
+
         if (dir != Vector2.zero)
         {
             transform.forward = new Vector3(dir.x, 0.0f, dir.y).normalized;
@@ -153,7 +155,7 @@ public class PlayerControl : MonoBehaviour
 
         if (m_isClone) return;
 
-        if(m_actionButtonPressed)
+        if (m_actionButtonPressed)
         {
             m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay += Time.deltaTime;
             if (m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay > playerVars.m_waveSpawnDelay)
@@ -174,9 +176,9 @@ public class PlayerControl : MonoBehaviour
         if (m_shieldIsActive) return;
 
         m_action2CooldownTimer -= Time.deltaTime;
-        if(m_action2CooldownTimer < 0.0f)
+        if (m_action2CooldownTimer < 0.0f)
         {
-            if(m_cooldownBar.gameObject.activeSelf)
+            if (m_cooldownBar.gameObject.activeSelf)
                 m_cooldownBar.Deactivate();
         }
         else
@@ -187,7 +189,7 @@ public class PlayerControl : MonoBehaviour
         {
             PerformAction2();
         }
-	}
+    }
 
     //////////////////////////////
     // Action 1
@@ -195,7 +197,7 @@ public class PlayerControl : MonoBehaviour
     void FireWave(GameObject a_prefab, Vector3 a_start, Vector3 a_dir)
     {
         PlayerVariables vars = GameLoop.Instance.GetPlayerVariables(m_playerType);
-        
+
         Wave wave = Instantiate(a_prefab, a_start, Quaternion.identity).GetComponent<Wave>();
 
         wave.Init(a_dir * vars.m_waveSpeed, m_controlId, vars.m_waveMinWidth, vars.m_waveMaxDistance, vars.m_waveAngle, vars.m_waveMinPower, vars.m_waveMaxPower);
@@ -203,14 +205,14 @@ public class PlayerControl : MonoBehaviour
     }
     void PerformAction1()
     {
-        GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
-        PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
 
         switch (m_playerType)
         {
             case Defines.EPlayerType.heavy: // Drums
                 FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right);
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset,  transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, transform.right);
                 m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
@@ -226,7 +228,7 @@ public class PlayerControl : MonoBehaviour
                 m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
-                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, -transform.forward);
                 m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
                 break;
         }
@@ -251,7 +253,7 @@ public class PlayerControl : MonoBehaviour
         Vector3 splitOffset = lightVars.m_cloneSpawnOffset * transform.right;
         float sign = (int)(Random.value + 0.5f);
         clone.transform.position += splitOffset * sign;
-        transform.position       += splitOffset * -sign;
+        transform.position += splitOffset * -sign;
     }
     void RemoveClone()
     {
@@ -266,15 +268,15 @@ public class PlayerControl : MonoBehaviour
     }
     void PerformAction2()
     {
-        GameplayVariables gameVars   = GameLoop.Instance.m_gameplayVariables;
-        PlayerVariables   playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
+        GameplayVariables gameVars = GameLoop.Instance.m_gameplayVariables;
+        PlayerVariables playerVars = GameLoop.Instance.GetPlayerVariables(m_playerType);
 
         switch (m_playerType)
         {
             case Defines.EPlayerType.heavy: // Drums
                 {
                     HeavyVariables heavyVars = gameVars.m_heavy;
-                    
+
                     BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position + transform.forward * heavyVars.m_blockPoleSpawnOffset, transform.rotation).GetComponent<BlockPole>();
                     p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
 
@@ -293,7 +295,7 @@ public class PlayerControl : MonoBehaviour
                 {
                     LightVariables lightVars = gameVars.m_light;
 
-                    if(m_clone == null)
+                    if (m_clone == null)
                     {
                         SpawnClone();
                     }
@@ -308,7 +310,7 @@ public class PlayerControl : MonoBehaviour
                     if (lsd.sqrMagnitude > 0)
                     {
                         Vector3 res = new Vector3(lsd.x, 0.0f, lsd.y);
-                        
+
                         m_moveDir += strangeVars.m_dodgePower * res.normalized;
                     }
                     else
