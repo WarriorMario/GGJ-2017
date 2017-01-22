@@ -12,7 +12,7 @@ public class StaticPlayerManager : MonoBehaviour
     {
         for(int i = 0; i < 4; i++)
         {
-            s_playerChoices.Add((Defines.EPlayerType)i);
+            s_playerChoices.Add((Defines.EPlayerType)i); 
         }
 
         for(int i = 0; i < s_playerChoices.Count; i++)

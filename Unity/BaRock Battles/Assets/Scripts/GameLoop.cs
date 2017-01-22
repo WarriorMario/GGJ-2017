@@ -32,6 +32,13 @@ public class GameLoop : MonoBehaviour
         }
     }
 
+    public void StartGame()
+    {
+        GetComponent<StaticPlayerManager>().SpawnPlayers();
+
+        m_players.AddRange(FindObjectsOfType<PlayerControl>());
+    }
+
     public PlayerVariables GetPlayerVariables(Defines.EPlayerType a_type)
     {
         switch(a_type)
@@ -57,9 +64,6 @@ public class GameLoop : MonoBehaviour
         }
         ms_instance = this;
 
-        GetComponent<StaticPlayerManager>().SpawnPlayers();
-
-        m_players.AddRange(FindObjectsOfType<PlayerControl>());
 
 
 
