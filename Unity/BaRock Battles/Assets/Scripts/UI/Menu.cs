@@ -14,6 +14,5 @@ public class Menu : MonoBehaviour
             m_CurrentScreen = newScreen;
             m_CurrentScreen.SetActive(true);
         }
-
     }
 }
