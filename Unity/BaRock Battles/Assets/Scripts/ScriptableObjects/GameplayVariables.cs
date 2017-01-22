@@ -30,7 +30,9 @@ public class HeavyVariables : PlayerVariables
 [System.Serializable]
 public class MediumVariables : PlayerVariables
 {
-    // ...
+    public float m_speedBoostDuration;
+    public float m_speedBoostSpeedScale;
+    public float m_speedBoostCooldown;
 }
 [System.Serializable]
 public class LightVariables : PlayerVariables

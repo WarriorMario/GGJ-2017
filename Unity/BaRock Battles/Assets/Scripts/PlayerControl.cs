@@ -19,14 +19,23 @@ public class PlayerControl : MonoBehaviour
     float m_action1CooldownTimer;
     float m_action2CooldownTimer;
 
+    // Clone
     PlayerControl m_clone;
     bool          m_isClone;
     float         m_cloneTimeAlive;
+
+    // Speed boost
+    bool  m_speedBoostIsActive;
+    float m_speedBoostTimeActive;
+
     
+    ///////////////////////////
+    // Game loop
+    ///////////////////////////
     void Start()
     {
         m_myController = GetComponent<CharacterController>();
-	}
+    }
 	void Update()
     {
         // Check if player should die.
@@ -51,9 +60,9 @@ public class PlayerControl : MonoBehaviour
         Vector2 movement = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
         Vector2 dir      = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
         
-        if(m_clone != null)
+        if (m_clone != null)
         {
-            LightVariables vars = gameVars.m_light;
+            LightVariables vars = GameLoop.Instance.m_gameplayVariables.m_light;
 
             // Auto de-spawn.
             m_clone.m_cloneTimeAlive += Time.deltaTime;
@@ -61,11 +70,31 @@ public class PlayerControl : MonoBehaviour
             {
                 RemoveClone();
             }
+
+            movement = -movement;
+            dir = -dir;
         }
+        if (m_speedBoostIsActive)
+        {
+            MediumVariables vars = GameLoop.Instance.m_gameplayVariables.m_medium;
+
+            m_speedBoostTimeActive += Time.deltaTime;
+            if (m_speedBoostTimeActive > vars.m_speedBoostDuration)
+            {
+                m_action2CooldownTimer = vars.m_speedBoostCooldown;
+
+                m_speedBoostIsActive = false;
+            }
+            else
+            {
+                movement *= vars.m_speedBoostSpeedScale;
+            }
+        }
+        
         if (m_isClone)
         {
             movement = -movement;
-            dir = -dir;
+            dir      = -dir;
         }
 
         movement *= playerVars.m_movementAccelerationSpeed * Time.deltaTime;
@@ -182,7 +211,8 @@ public class PlayerControl : MonoBehaviour
                 {
                     MediumVariables mediumVars = gameVars.m_medium;
 
-                    // ...
+                    m_speedBoostTimeActive = 0.0f;
+                    m_speedBoostIsActive = true;
 
                     break;
                 }
