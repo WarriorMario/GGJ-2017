@@ -19,6 +19,10 @@ public class PlayerControl : MonoBehaviour
     float m_action1CooldownTimer;
     float m_action2CooldownTimer;
 
+    // Shield
+    bool  m_shieldIsActive;
+    float m_shieldTimeActive;
+
     // Clone
     PlayerControl m_clone;
     bool          m_isClone;
@@ -60,6 +64,19 @@ public class PlayerControl : MonoBehaviour
         Vector2 movement = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
         Vector2 dir      = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
         
+        if (m_shieldIsActive)
+        {
+            HeavyVariables vars = GameLoop.Instance.m_gameplayVariables.m_heavy;
+
+            m_shieldTimeActive += Time.deltaTime;
+            if (m_shieldTimeActive > vars.m_blockPoleLifeTime)
+            {
+                m_action2CooldownTimer = vars.m_blockPoleCooldown;
+
+                m_shieldTimeActive = 0.0f;
+                m_shieldIsActive = false;
+            }
+        }
         if (m_clone != null)
         {
             LightVariables vars = GameLoop.Instance.m_gameplayVariables.m_light;
@@ -83,6 +100,7 @@ public class PlayerControl : MonoBehaviour
             {
                 m_action2CooldownTimer = vars.m_speedBoostCooldown;
 
+                m_speedBoostTimeActive = 0.0f;
                 m_speedBoostIsActive = false;
             }
             else
@@ -114,6 +132,9 @@ public class PlayerControl : MonoBehaviour
         {
             PerformAction1();
         }
+
+        if (m_shieldIsActive) return;
+
         m_action2CooldownTimer -= Time.deltaTime;
         if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId) && m_action2CooldownTimer <= 0.0f)
         {
@@ -204,14 +225,13 @@ public class PlayerControl : MonoBehaviour
                     BlockPole p = Instantiate(heavyVars.m_blockPolePrefab, transform.position + transform.forward * heavyVars.m_blockPoleSpawnOffset, transform.rotation).GetComponent<BlockPole>();
                     p.Init(heavyVars.m_blockPoleLifeTime, m_controlId);
 
-                    m_action2CooldownTimer = heavyVars.m_blockPoleCooldown;
+                    m_shieldIsActive = true;
                 }
                 break;
             case Defines.EPlayerType.medium: // Violin
                 {
                     MediumVariables mediumVars = gameVars.m_medium;
 
-                    m_speedBoostTimeActive = 0.0f;
                     m_speedBoostIsActive = true;
 
                     break;
