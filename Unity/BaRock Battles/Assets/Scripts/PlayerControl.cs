@@ -35,7 +35,7 @@ public class PlayerControl : MonoBehaviour
     // Speed boost
     bool  m_speedBoostIsActive;
     float m_speedBoostTimeActive;
-
+    
     
     ///////////////////////////
     // Game loop
@@ -203,9 +203,9 @@ public class PlayerControl : MonoBehaviour
                 m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
-                Trigger.PlayerDidgeridooAttackWave(
+                Trigger.PlayerViolinAttackWave(
                     this,
-                    FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_medium.m_waveSpawnOffset, -transform.forward, -1.0f)
+                    FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f)
                 );
 
                 m_action1CooldownTimer = gameVars.m_medium.m_attackDelayTime;
@@ -223,11 +223,11 @@ public class PlayerControl : MonoBehaviour
                 m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
-                Trigger.PlayerViolinAttackWave(
+                Trigger.PlayerDidgeridooAttackWave(
                     this,
-                    FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f)
+                    FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveMaxDistance, -transform.forward, -1.0f)
                 );
-                
+
                 m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
                 break;
         }
