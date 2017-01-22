@@ -82,6 +82,7 @@ public class Wave : MonoBehaviour
     }
     public void Redirect(Vector3 a_newDirection)
     {
+        m_distance = 0.0f;
         m_startPos = transform.position;
         transform.forward = a_newDirection;
         m_myRigidBody.velocity = a_newDirection * m_myRigidBody.velocity.magnitude;

@@ -9,6 +9,9 @@ public class PlayerControl : MonoBehaviour
 {
     public Defines.EPlayerType m_playerType;
     public int                 m_controlId;
+    // basic variables
+    public float m_maxYvel;
+    public float m_gravity;
 
     // References.
     CharacterController m_myController;
@@ -16,6 +19,10 @@ public class PlayerControl : MonoBehaviour
     Vector3 m_moveDir; // current velocity vector
 
     // Player type specific variables
+    float m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay;
+    bool m_actionButtonPressed = false;
+    static int ms_MadPropsForBeingAweesomeProgrammer = 0;
+
     float m_action1CooldownTimer;
     float m_action2CooldownTimer;
 
@@ -32,16 +39,34 @@ public class PlayerControl : MonoBehaviour
     bool  m_speedBoostIsActive;
     float m_speedBoostTimeActive;
 
+    // CooldownBar
+    CooldownBar m_cooldownBar;
+    float m_currentCooldownMaxTime = 0.0f;
+
     
     ///////////////////////////
     // Game loop
     ///////////////////////////
-    void Start()
+    void Awake()
     {
         m_myController = GetComponent<CharacterController>();
+        m_cooldownBar = GetComponentInChildren<CooldownBar>();
     }
+
 	void Update()
     {
+        if(!m_myController.isGrounded)
+        { 
+            if (m_myController.velocity.y > m_maxYvel)
+            {
+                m_moveDir.y -= m_gravity * Time.deltaTime;
+                if(m_moveDir.y > m_maxYvel)
+                {
+                    m_moveDir.y = m_maxYvel;
+                }
+            }
+        }
+
         // Check if player should die.
         if(transform.position.y < Defines.PLAYER_MINY)
         {
@@ -72,6 +97,8 @@ public class PlayerControl : MonoBehaviour
             if (m_shieldTimeActive > vars.m_blockPoleLifeTime)
             {
                 m_action2CooldownTimer = vars.m_blockPoleCooldown;
+                m_currentCooldownMaxTime = vars.m_blockPoleCooldown;
+                m_cooldownBar.Activate();
 
                 m_shieldTimeActive = 0.0f;
                 m_shieldIsActive = false;
@@ -87,9 +114,6 @@ public class PlayerControl : MonoBehaviour
             {
                 RemoveClone();
             }
-
-            movement = -movement;
-            dir = -dir;
         }
         if (m_speedBoostIsActive)
         {
@@ -99,6 +123,8 @@ public class PlayerControl : MonoBehaviour
             if (m_speedBoostTimeActive > vars.m_speedBoostDuration)
             {
                 m_action2CooldownTimer = vars.m_speedBoostCooldown;
+                m_currentCooldownMaxTime = vars.m_speedBoostCooldown;
+                m_cooldownBar.Activate();
 
                 m_speedBoostTimeActive = 0.0f;
                 m_speedBoostIsActive = false;
@@ -127,15 +153,36 @@ public class PlayerControl : MonoBehaviour
 
         if (m_isClone) return;
 
+        if(m_actionButtonPressed)
+        {
+            m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay += Time.deltaTime;
+            if (m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay > playerVars.m_waveSpawnDelay)
+            {
+                PerformAction1();
+                m_actionButtonPressed = false;
+                m_timeUntillAction1DelayTimerASFloatingPointMightAlsoPossbilyBeSetToZeroIfYouDontWantADelay = 0.0f;
+                ms_MadPropsForBeingAweesomeProgrammer++;
+            }
+        }
+
         m_action1CooldownTimer -= Time.deltaTime;
         if (controls.GetDown(EKeyId.EKeyId_Action1, m_controlId) && m_action1CooldownTimer <= 0.0f)
         {
-            PerformAction1();
+            m_actionButtonPressed = true;
         }
 
         if (m_shieldIsActive) return;
 
         m_action2CooldownTimer -= Time.deltaTime;
+        if(m_action2CooldownTimer < 0.0f)
+        {
+            if(m_cooldownBar.gameObject.activeSelf)
+                m_cooldownBar.Deactivate();
+        }
+        else
+        {
+            m_cooldownBar.UpdateBar(1.0f - (m_action2CooldownTimer / m_currentCooldownMaxTime));
+        }
         if (controls.GetDown(EKeyId.EKeyId_Action2, m_controlId) && m_action2CooldownTimer <= 0.0f)
         {
             PerformAction2();
@@ -162,21 +209,25 @@ public class PlayerControl : MonoBehaviour
         switch (m_playerType)
         {
             case Defines.EPlayerType.heavy: // Drums
-                FireWave(gameVars.m_wavePrefab, transform.position, -transform.right);
-                FireWave(gameVars.m_wavePrefab, transform.position,  transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset, -transform.right);
+                FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_heavy.m_waveToDrumOffset,  transform.right);
+                m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
                 FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
+                m_action1CooldownTimer = gameVars.m_medium.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.light: // Flute
                 FireWave(gameVars.m_wavePrefab, transform.position, transform.forward);
-                if(m_clone != null)
+                if (m_clone != null)
                 {
                     RemoveClone();
                 }
+                m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
                 FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward);
+                m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
                 break;
         }
     }
@@ -210,6 +261,8 @@ public class PlayerControl : MonoBehaviour
         Destroy(m_clone.gameObject);
         m_clone = null;
         m_action2CooldownTimer = lightVars.m_cloneCooldown;
+        m_currentCooldownMaxTime = lightVars.m_cloneCooldown;
+        m_cooldownBar.Activate();
     }
     void PerformAction2()
     {
@@ -251,8 +304,20 @@ public class PlayerControl : MonoBehaviour
                 {
                     StrangeVariables strangeVars = gameVars.m_strange;
 
-                    m_moveDir += strangeVars.m_dodgePower * transform.forward;
+                    Vector2 lsd = gameVars.m_controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
+                    if (lsd.sqrMagnitude > 0)
+                    {
+                        Vector3 res = new Vector3(lsd.x, 0.0f, lsd.y);
+                        
+                        m_moveDir += strangeVars.m_dodgePower * res.normalized;
+                    }
+                    else
+                    {
+                        m_moveDir += strangeVars.m_dodgePower * transform.forward;
+                    }
                     m_action2CooldownTimer = strangeVars.m_dodgeCooldown;
+                    m_currentCooldownMaxTime = strangeVars.m_dodgeCooldown;
+                    m_cooldownBar.Activate();
 
                     break;
                 }
