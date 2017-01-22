@@ -15,6 +15,7 @@ ModelImporter:
     100014: floor
     100016: gold_marble
     100018: marble_marble_pillar
+    100020: marble_pillar
     400000: carpet
     400002: marble_dark
     400004: marble_light
@@ -25,6 +26,7 @@ ModelImporter:
     400014: floor
     400016: gold_marble
     400018: marble_marble_pillar
+    400020: marble_pillar
     2300000: carpet
     2300002: marble_dark
     2300004: marble_light
@@ -34,6 +36,7 @@ ModelImporter:
     2300012: floor
     2300014: gold_marble
     2300016: marble_marble_pillar
+    2300018: marble_pillar
     3300000: carpet
     3300002: marble_dark
     3300004: marble_light
@@ -43,6 +46,7 @@ ModelImporter:
     3300012: floor
     3300014: gold_marble
     3300016: marble_marble_pillar
+    3300018: marble_pillar
     4300000: carpet
     4300002: marble_dark
     4300004: marble_light
@@ -52,6 +56,7 @@ ModelImporter:
     4300012: floor
     4300014: gold_marble
     4300016: marble_marble_pillar
+    4300018: marble_pillar
   materials:
     importMaterials: 1
     materialName: 0
