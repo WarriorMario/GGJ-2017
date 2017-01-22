@@ -68,7 +68,16 @@ public class PlayerControl : MonoBehaviour
 
         Vector2 movement = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
         Vector2 dir      = controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalRight, EKeyPairId.EKeyPairId_VerticalRight, m_controlId);
-        
+
+        if (movement.sqrMagnitude > 0.0f)
+        {
+            Trigger.PlayerStartWalking(this);
+        }
+        else
+        {
+            Trigger.PlayerStopWalking(this);
+        }
+
         if (m_shieldIsActive)
         {
             HeavyVariables vars = GameLoop.Instance.m_gameplayVariables.m_heavy;
@@ -95,7 +104,7 @@ public class PlayerControl : MonoBehaviour
         }
         if (m_speedBoostIsActive)
         {
-            MediumVariables vars = GameLoop.Instance.m_gameplayVariables.m_medium;
+            StrangeVariables vars = GameLoop.Instance.m_gameplayVariables.m_strange;
 
             m_speedBoostTimeActive += Time.deltaTime;
             if (m_speedBoostTimeActive > vars.m_speedBoostDuration)
@@ -194,9 +203,9 @@ public class PlayerControl : MonoBehaviour
                 m_action1CooldownTimer = gameVars.m_heavy.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.medium: // Violin
-                Trigger.PlayerViolinAttackWave(
+                Trigger.PlayerDidgeridooAttackWave(
                     this,
-                    FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f)
+                    FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_medium.m_waveSpawnOffset, -transform.forward, -1.0f)
                 );
 
                 m_action1CooldownTimer = gameVars.m_medium.m_attackDelayTime;
@@ -214,9 +223,9 @@ public class PlayerControl : MonoBehaviour
                 m_action1CooldownTimer = gameVars.m_light.m_attackDelayTime;
                 break;
             case Defines.EPlayerType.strange: // Didgeridoo
-                Trigger.PlayerDidgeridooAttackWave(
+                Trigger.PlayerViolinAttackWave(
                     this,
-                    FireWave(gameVars.m_wavePrefab, transform.position + transform.forward * gameVars.m_strange.m_waveSpawnOffset, - transform.forward, -1.0f)
+                    FireWave(gameVars.m_wavePrefab, transform.position, transform.forward, 1.0f)
                 );
                 
                 m_action1CooldownTimer = gameVars.m_strange.m_attackDelayTime;
@@ -279,9 +288,20 @@ public class PlayerControl : MonoBehaviour
                 {
                     MediumVariables mediumVars = gameVars.m_medium;
 
-                    Trigger.PlayerViolinAttackSecondary(this);
+                    Vector2 lsd = gameVars.m_controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
+                    if (lsd.sqrMagnitude > 0)
+                    {
+                        Vector3 res = new Vector3(lsd.x, 0.0f, lsd.y);
 
-                    m_speedBoostIsActive = true;
+                        m_moveDir += mediumVars.m_dodgePower * res.normalized;
+                    }
+                    else
+                    {
+                        m_moveDir += mediumVars.m_dodgePower * transform.forward;
+                    }
+                    Trigger.PlayerDigeridooAttackSecondary(this);
+
+                    m_action2CooldownTimer = mediumVars.m_dodgeCooldown;
 
                     break;
                 }
@@ -303,20 +323,9 @@ public class PlayerControl : MonoBehaviour
                 {
                     StrangeVariables strangeVars = gameVars.m_strange;
 
-                    Vector2 lsd = gameVars.m_controls.GetPressAsAxis(EKeyPairId.EKeyPairId_HorizontalLeft, EKeyPairId.EKeyPairId_VerticalLeft, m_controlId);
-                    if (lsd.sqrMagnitude > 0)
-                    {
-                        Vector3 res = new Vector3(lsd.x, 0.0f, lsd.y);
-                        
-                        m_moveDir += strangeVars.m_dodgePower * res.normalized;
-                    }
-                    else
-                    {
-                        m_moveDir += strangeVars.m_dodgePower * transform.forward;
-                    }
-                    Trigger.PlayerDigeridooAttackSecondary(this);
+                    Trigger.PlayerViolinAttackSecondary(this);
 
-                    m_action2CooldownTimer = strangeVars.m_dodgeCooldown;
+                    m_speedBoostIsActive = true;
 
                     break;
                 }

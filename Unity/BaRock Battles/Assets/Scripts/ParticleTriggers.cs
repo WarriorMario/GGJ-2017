@@ -22,33 +22,37 @@ public class ParticleTriggers : MonoBehaviour {
 
     public void SpawnDroppingParticle(PlayerControl a_player)
     {
-        ParticleSystem particles = Instantiate(m_droppingParticle, a_player.transform.position, a_player.transform.rotation).GetComponent<ParticleSystem>();
+        Quaternion rotation = Quaternion.LookRotation(-a_player.transform.forward);
+        ParticleSystem particles = Instantiate(m_droppingParticle, a_player.transform.position, rotation).GetComponent<ParticleSystem>();
         Destroy(particles.gameObject, particles.main.startLifetime.constant * 2.0f);
     }
 
     public void SpawnDrumParticle(PlayerControl a_player, Wave a_wave)
     {
-        ParticleSystem particles = Instantiate(m_drumParticle, a_player.transform.position, a_player.transform.rotation).GetComponent<ParticleSystem>();
+        Quaternion rotation = Quaternion.LookRotation(a_player.transform.forward);
+        ParticleSystem particles = Instantiate(m_drumParticle, a_player.transform.position, rotation).GetComponent<ParticleSystem>();
         Destroy(particles.gameObject, particles.main.startLifetime.constant * 2.0f);
     }
 
     public void SpawnViolinParticle(PlayerControl a_player, Wave a_wave)
     {
-        ParticleSystem particles = Instantiate(m_violinParticle, a_player.transform.position, a_player.transform.rotation).GetComponent<ParticleSystem>();
+        Quaternion rotation = Quaternion.LookRotation(-a_player.transform.forward);
+        ParticleSystem particles = Instantiate(m_violinParticle, a_player.transform.position, rotation).GetComponent<ParticleSystem>();
         Destroy(particles.gameObject, particles.main.startLifetime.constant * 2.0f);
     }
 
     public void SpawnFluteParticle(PlayerControl a_player, Wave a_wave)
     {
-        ParticleSystem particles = Instantiate(m_fluteParticle, a_player.transform.position, a_player.transform.rotation).GetComponent<ParticleSystem>();
+        Quaternion rotation = Quaternion.LookRotation(-a_player.transform.forward);
+        ParticleSystem particles = Instantiate(m_fluteParticle, a_player.transform.position, rotation).GetComponent<ParticleSystem>();
         Destroy(particles.gameObject, particles.main.startLifetime.constant * 2.0f);
     }
 
     public void SpawnDidgeridooParticle(PlayerControl a_player, Wave a_wave)
     {
-        ParticleSystem particles = Instantiate(m_didgeridooParticle, a_player.transform.position, a_player.transform.rotation).GetComponent<ParticleSystem>();
+        Quaternion rotation = Quaternion.LookRotation(-a_player.transform.forward);
+        ParticleSystem particles = Instantiate(m_didgeridooParticle, a_player.transform.position, rotation).GetComponent<ParticleSystem>();
         Destroy(particles.gameObject, particles.main.startLifetime.constant * 2.0f);
-        
     }
 
     public void SpawnShieldParticle(BlockPole a_pole)

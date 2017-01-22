@@ -59,6 +59,16 @@ public class Trigger
         a_player.transform.GetComponentInChildren<Animator>().SetTrigger("SpecialAttack");
     }
 
+    public static void PlayerStartWalking(PlayerControl a_player)
+    {
+        a_player.transform.GetComponentInChildren<Animator>().SetBool("Walking", true);
+    }
+
+    public static void PlayerStopWalking(PlayerControl a_player)
+    {
+        a_player.transform.GetComponentInChildren<Animator>().SetBool("Walking", false);
+    }
+
     public static void PlayerDies(PlayerControl a_player)
     {
         GameLoop.Instance.m_particleTriggers.SpawnDroppingParticle(a_player);

@@ -1,0 +1,408 @@
+fileFormatVersion: 2
+guid: ede047e3d6dc819449c472780db29708
+timeCreated: 1485078990
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Flute
+    100002: //RootNode
+    100004: FluteGuy_mesh
+    100006: L_prop_jnt
+    100008: meshGrp
+    100010: prop_cntr_jnt
+    100012: propsGrp
+    100014: R_prop_jnt
+    100016: rigGrp
+    100018: Slave_head
+    100020: Slave_head1
+    100022: Slave_L_ankle
+    100024: Slave_L_ball
+    100026: Slave_L_clavicle
+    100028: Slave_L_elbow
+    100030: Slave_L_hip
+    100032: Slave_L_knee
+    100034: Slave_L_shoulder
+    100036: Slave_L_wrist
+    100038: Slave_pelvis
+    100040: Slave_R_ankle
+    100042: Slave_R_ball
+    100044: Slave_R_clavicle
+    100046: Slave_R_elbow
+    100048: Slave_R_hip
+    100050: Slave_R_knee
+    100052: Slave_R_shoulder
+    100054: Slave_R_wrist
+    100056: Slave_torso
+    100058: Slave_waist
+    400000: Flute
+    400002: //RootNode
+    400004: FluteGuy_mesh
+    400006: L_prop_jnt
+    400008: meshGrp
+    400010: prop_cntr_jnt
+    400012: propsGrp
+    400014: R_prop_jnt
+    400016: rigGrp
+    400018: Slave_head
+    400020: Slave_head1
+    400022: Slave_L_ankle
+    400024: Slave_L_ball
+    400026: Slave_L_clavicle
+    400028: Slave_L_elbow
+    400030: Slave_L_hip
+    400032: Slave_L_knee
+    400034: Slave_L_shoulder
+    400036: Slave_L_wrist
+    400038: Slave_pelvis
+    400040: Slave_R_ankle
+    400042: Slave_R_ball
+    400044: Slave_R_clavicle
+    400046: Slave_R_elbow
+    400048: Slave_R_hip
+    400050: Slave_R_knee
+    400052: Slave_R_shoulder
+    400054: Slave_R_wrist
+    400056: Slave_torso
+    400058: Slave_waist
+    2300000: Flute
+    3300000: Flute
+    4300000: FluteGuy_mesh
+    4300002: Flute
+    7400000: Run
+    7400002: Attack
+    7400004: Idle
+    9500000: //RootNode
+    13700000: FluteGuy_mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Run
+      takeName: Take 001
+      firstFrame: 17
+      lastFrame: 45
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: propsGrp
+        weight: 1
+      - path: propsGrp/Flute
+        weight: 1
+      - path: rigGrp
+        weight: 1
+      - path: rigGrp/meshGrp
+        weight: 1
+      - path: rigGrp/meshGrp/FluteGuy_mesh
+        weight: 1
+      - path: rigGrp/Slave_pelvis
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle/Slave_L_ball
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle/Slave_R_ball
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/prop_cntr_jnt
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_head
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_head/Slave_head1
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist/L_prop_jnt
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist/R_prop_jnt
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Attack
+      takeName: Take 001
+      firstFrame: 45
+      lastFrame: 69
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: propsGrp
+        weight: 1
+      - path: propsGrp/Flute
+        weight: 1
+      - path: rigGrp
+        weight: 1
+      - path: rigGrp/meshGrp
+        weight: 1
+      - path: rigGrp/meshGrp/FluteGuy_mesh
+        weight: 1
+      - path: rigGrp/Slave_pelvis
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle/Slave_L_ball
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle/Slave_R_ball
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/prop_cntr_jnt
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_head
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_head/Slave_head1
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist/L_prop_jnt
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist/R_prop_jnt
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 70
+      lastFrame: 89
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: propsGrp
+        weight: 1
+      - path: propsGrp/Flute
+        weight: 1
+      - path: rigGrp
+        weight: 1
+      - path: rigGrp/meshGrp
+        weight: 1
+      - path: rigGrp/meshGrp/FluteGuy_mesh
+        weight: 1
+      - path: rigGrp/Slave_pelvis
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle/Slave_L_ball
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle/Slave_R_ball
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/prop_cntr_jnt
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_head
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_head/Slave_head1
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist/L_prop_jnt
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist
+        weight: 1
+      - path: rigGrp/Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist/R_prop_jnt
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

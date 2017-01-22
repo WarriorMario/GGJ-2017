@@ -32,9 +32,9 @@ public class HeavyVariables : PlayerVariables
 [System.Serializable]
 public class MediumVariables : PlayerVariables
 {
-    public float m_speedBoostDuration;
-    public float m_speedBoostSpeedScale;
-    public float m_speedBoostCooldown;
+    public float m_waveSpawnOffset;
+    public float m_dodgePower;
+    public float m_dodgeCooldown;
 }
 [System.Serializable]
 public class LightVariables : PlayerVariables
@@ -46,9 +46,9 @@ public class LightVariables : PlayerVariables
 [System.Serializable]
 public class StrangeVariables : PlayerVariables
 {
-    public float m_waveSpawnOffset;
-    public float m_dodgePower;
-    public float m_dodgeCooldown;
+    public float m_speedBoostDuration;
+    public float m_speedBoostSpeedScale;
+    public float m_speedBoostCooldown;
 }
 
 
