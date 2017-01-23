@@ -1,0 +1,373 @@
+fileFormatVersion: 2
+guid: f60471910f74c644494e3cd565a92974
+timeCreated: 1485046803
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: L_prop_jnt
+    100002: meshGrp
+    100004: muscular1
+    100006: R_prop_jnt
+    100008: Slave_head
+    100010: Slave_head1
+    100012: Slave_L_ankle
+    100014: Slave_L_ball
+    100016: Slave_L_clavicle
+    100018: Slave_L_elbow
+    100020: Slave_L_hip
+    100022: Slave_L_knee
+    100024: Slave_L_shoulder
+    100026: Slave_L_wrist
+    100028: Slave_pelvis
+    100030: Slave_R_ankle
+    100032: Slave_R_ball
+    100034: Slave_R_clavicle
+    100036: Slave_R_elbow
+    100038: Slave_R_hip
+    100040: Slave_R_knee
+    100042: Slave_R_shoulder
+    100044: Slave_R_wrist
+    100046: Slave_torso
+    100048: Slave_waist
+    100050: //RootNode
+    400000: L_prop_jnt
+    400002: meshGrp
+    400004: muscular1
+    400006: R_prop_jnt
+    400008: Slave_head
+    400010: Slave_head1
+    400012: Slave_L_ankle
+    400014: Slave_L_ball
+    400016: Slave_L_clavicle
+    400018: Slave_L_elbow
+    400020: Slave_L_hip
+    400022: Slave_L_knee
+    400024: Slave_L_shoulder
+    400026: Slave_L_wrist
+    400028: Slave_pelvis
+    400030: Slave_R_ankle
+    400032: Slave_R_ball
+    400034: Slave_R_clavicle
+    400036: Slave_R_elbow
+    400038: Slave_R_hip
+    400040: Slave_R_knee
+    400042: Slave_R_shoulder
+    400044: Slave_R_wrist
+    400046: Slave_torso
+    400048: Slave_waist
+    400050: //RootNode
+    4300000: muscular1
+    7400000: Idle
+    7400002: Run
+    7400004: Attack
+    9500000: //RootNode
+    13700000: muscular1
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 11
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: meshGrp
+        weight: 1
+      - path: meshGrp/muscular1
+        weight: 1
+      - path: Slave_pelvis
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle/Slave_L_ball
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle/Slave_R_ball
+        weight: 1
+      - path: Slave_pelvis/Slave_waist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_head
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_head/Slave_head1
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist/L_prop_jnt
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist/R_prop_jnt
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Run
+      takeName: Take 001
+      firstFrame: 13
+      lastFrame: 28
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: meshGrp
+        weight: 1
+      - path: meshGrp/muscular1
+        weight: 1
+      - path: Slave_pelvis
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle/Slave_L_ball
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle
+        weight: 1
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle/Slave_R_ball
+        weight: 1
+      - path: Slave_pelvis/Slave_waist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_head
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_head/Slave_head1
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist/L_prop_jnt
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist/R_prop_jnt
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Attack
+      takeName: Take 001
+      firstFrame: 29
+      lastFrame: 44
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: meshGrp
+        weight: 1
+      - path: meshGrp/muscular1
+        weight: 1
+      - path: Slave_pelvis
+        weight: 1
+      - path: Slave_pelvis/Slave_L_hip
+        weight: 0
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee
+        weight: 0
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle
+        weight: 0
+      - path: Slave_pelvis/Slave_L_hip/Slave_L_knee/Slave_L_ankle/Slave_L_ball
+        weight: 0
+      - path: Slave_pelvis/Slave_R_hip
+        weight: 0
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee
+        weight: 0
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle
+        weight: 0
+      - path: Slave_pelvis/Slave_R_hip/Slave_R_knee/Slave_R_ankle/Slave_R_ball
+        weight: 0
+      - path: Slave_pelvis/Slave_waist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_head
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_head/Slave_head1
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_L_clavicle/Slave_L_shoulder/Slave_L_elbow/Slave_L_wrist/L_prop_jnt
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist
+        weight: 1
+      - path: Slave_pelvis/Slave_waist/Slave_torso/Slave_R_clavicle/Slave_R_shoulder/Slave_R_elbow/Slave_R_wrist/R_prop_jnt
+        weight: 1
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

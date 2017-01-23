@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // raymi plz comments
 public class PlayerSelection : MonoBehaviour
 {
-    class Mapping
+    public class Mapping
     {
         public int   cid;
         public int   typeIdx;
@@ -20,9 +20,14 @@ public class PlayerSelection : MonoBehaviour
     public GameObject[] m_Selection;
     public Color[] m_PlayerColors;
     public List<Sprite> m_Sprites;
+
+
+    bool started = false;
     
     void Update()
     {
+        if (started) return;
+
         // Join
         int cid = m_Vars.m_controls.GetDownOnAnyController(InputWrapper.EKeyId.EKeyId_Confirm);
         if(cid != -1 && !m_players.Exists(x => x.cid == cid))
@@ -134,11 +139,14 @@ public class PlayerSelection : MonoBehaviour
 
     IEnumerator DelayedLoad()
     {
-        foreach(Mapping map in m_players)
+        started = true;
+
+        StaticPlayerManager.mappings = new List<PlayerSelection.Mapping>();
+        foreach (Mapping map in m_players)
         {
-            if(map.cid == -1)
+            if(map.cid != -1)
             {
-                StaticPlayerManager.s_playerChoices.Add((Defines.EPlayerType)map.typeIdx);
+                StaticPlayerManager.mappings.Add(map);
             }
         }
 

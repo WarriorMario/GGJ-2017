@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class StaticPlayerManager : MonoBehaviour
 {
-    public static List<Defines.EPlayerType> s_playerChoices = new List<Defines.EPlayerType>();
-    public static List<Color> s_playerColors = new List<Color>();
+    public static List<PlayerSelection.Mapping> mappings;
 
     public GameObject[] m_playerPrefabs = new GameObject[4];
 
     public void SpawnPlayers()
     {
-        for(int i = 0; i < s_playerChoices.Count; i++)
+        for (int i = 0; i < mappings.Count; i++)
         {
-            Instantiate(m_playerPrefabs[(int)s_playerChoices[i]]);
+            Vector3 spawn = transform.GetChild(i).transform.position;
+            PlayerControl pc = Instantiate(m_playerPrefabs[mappings[i].typeIdx], spawn, Quaternion.identity).GetComponent<PlayerControl>();
+            pc.m_controlId = mappings[i].cid;
         }
     }
 }
